@@ -53,7 +53,7 @@ main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/nama-gambar-anda.jpg'); /* Sesuaikan path gambar background Anda */
+    background-image: url('../images/bg2.jpeg'); /* Sesuaikan path gambar background Anda */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
