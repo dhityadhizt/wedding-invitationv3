@@ -1,5 +1,5 @@
 :root {
-    --primary-font-color: '#212529';
+    --primary-font-color: #212529; /* Diperbaiki: tanpa tanda kutip */
     --bg-color: #f8f9fa;
 
     --fontSize-heading-lg: 3rem;
@@ -19,7 +19,7 @@ html {
     scrollbar-width: none !important;
 }
 
-* {
+* { /* Diperbaiki: karakter tak kasat mata dihapus */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -43,6 +43,35 @@ body::-webkit-scrollbar {
 
 p {
     line-height: 1.7rem;
+}
+
+/* ==========================================================
+   PENGATURAN BACKGROUND GAMBAR SETELAH HALAMAN HOME
+   ========================================================== */
+main > section:not(.welcome):not(.home) {
+    background-image: url('../images/bg2.jpeg'); /* Ganti dengan path/lokasi gambar Anda */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+/* Memberikan lapisan transparan (overlay) agar teks tetap mudah dibaca di atas gambar */
+main > section:not(.welcome):not(.home)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.85); /* Sesuaikan warna dasar & transparansi */
+    z-index: 1;
+}
+
+/* Memastikan konten di dalam seksi tetap berada di atas lapisan overlay */
+main > section:not(.welcome):not(.home) > * {
+    position: relative;
+    z-index: 2;
 }
 
 .audio button {
