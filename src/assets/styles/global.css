@@ -53,13 +53,14 @@ main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/bg2.jpeg'); /* Sesuaikan path gambar background Anda */
+    background-image: url('../images/bg2.jpeg'); /* Ganti dengan nama file background Anda */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
 }
 
+/* Lapisan transparan (overlay) */
 main > section#bride::before,
 main > section.hadist::before,
 main > section.time::before,
@@ -71,10 +72,11 @@ main > section.wishas::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.85); /* Sesuaikan tingkat transparansi */
     z-index: 1;
 }
 
+/* Memastikan konten berada di atas overlay */
 main > section#bride > *,
 main > section.hadist > *,
 main > section.time > *,
@@ -85,51 +87,45 @@ main > section.wishas > * {
 }
 
 /* ==========================================================
-   ORNAMEN PEMBATAS BAR (PNG) DENGA ANIMASI BERGOYANG HALUS
+   ORNAMEN PEMBATAS (BAR.PNG) DENGAN ANIMASI GOYANG HALUS
    ========================================================== */
-.section-divider {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem 0;
-    overflow: hidden; /* Mencegah overflow saat animasi bergerak */
-    position: relative;
-    z-index: 3;
-}
-
-.section-divider img.ornament-bar {
-    max-width: 80%;            /* Menjaga agar tidak terlalu lebar */
-    width: 320px;              /* Ukuran proporsional standar */
-    height: auto;              /* Menjaga aspek rasio agar tidak terpotong atau gepeng */
-    object-fit: contain;
+.divider-ornament {
     display: block;
-    margin: 0 auto;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+    margin: 2.5rem auto;          /* Posisi presisi di tengah secara horizontal */
+    width: 100%;
+    max-width: 220px;            /* Ukuran sedang ideal untuk desktop */
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;        /* Mencegah gangguan interaksi klik/scroll */
+    z-index: 5;
     
-    /* Animasi bergoyang dinamis & smooth */
-    animation: smoothSway 5s ease-in-out infinite alternate;
-    transform-origin: center center;
+    /* Animasi bergoyang tipis & melayang secara lembut (smooth) */
+    animation: swaySmooth 4s ease-in-out infinite alternate;
 }
 
-/* Keyframes Animasi Goyang Dinamis Halus */
-@keyframes smoothSway {
+/* Penyesuaian ukuran responsif untuk HP/Layar Kecil agar tidak terpotong */
+@media screen and (max-width: 768px) {
+    .divider-ornament {
+        max-width: 150px;        /* Ukuran proporsional untuk perangkat mobile */
+        margin: 1.8rem auto;
+    }
+}
+
+/* Keyframe Animasi Bergoyang & Melayang Halus */
+@keyframes swaySmooth {
     0% {
-        transform: translateY(0) rotate(0deg) scale(1);
+        transform: translateY(0) rotate(-1deg) scale(1);
     }
-    33% {
-        transform: translateY(-4px) rotate(1.5deg) scale(1.02);
-    }
-    66% {
-        transform: translateY(3px) rotate(-1.5deg) scale(0.99);
+    50% {
+        transform: translateY(-5px) rotate(0deg) scale(1.02);
     }
     100% {
-        transform: translateY(-2px) rotate(1deg) scale(1.01);
+        transform: translateY(0) rotate(1deg) scale(1);
     }
 }
 
 /* ==========================================================
-   PENGATURAN TOMBOL AUDIO
+   TOMBOL AUDIO
    ========================================================== */
 .audio button {
     width: 2rem;
@@ -183,8 +179,12 @@ main > section.wishas > * {
 }
 
 @keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes snowFall {
@@ -193,8 +193,12 @@ main > section.wishas > * {
         transform: translateX(0) rotate(0deg);
         opacity: 0;
     }
-    10% { opacity: 0.9; }
-    50% { transform: translateX(20px) rotate(180deg); }
+    10% {
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateX(20px) rotate(180deg);
+    }
     100% {
         top: 105%;
         transform: translateX(-20px) rotate(360deg);
