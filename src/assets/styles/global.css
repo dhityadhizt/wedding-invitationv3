@@ -1,1 +1,127 @@
+:root {
+    --primary-font-color: '#212529';
+    --bg-color: #f8f9fa;
 
+    --fontSize-heading-lg: 3rem;
+    --fontSize-heading-base: 2.8rem;
+    --fontSize-text-base: 1rem;
+
+    --sacramento: Sacramento, cursive;
+    --arabic: 'Noto Naskh Arabic', serif;
+
+    --shadow-md: 0 0 10px rgba(0, 0, 0, 0.3);
+
+    --transition-small: all .3s ease;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: none !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+}
+
+body {
+    font-family: 'Josefin Sans', sans-serif;
+    color: var(--primary-font-color);
+    overflow-y: hidden;
+}
+
+body.active {
+    overflow-y: auto;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+p {
+    line-height: 1.7rem;
+}
+
+.audio button {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    cursor: pointer;
+    transform: translateX(200%);
+    transition: 1.5s transform ease;
+    z-index: 99;
+}
+
+.audio button.show {
+    transform: translateX(0);
+}
+
+.audio button.active {
+    animation: rotate 3s linear infinite;
+}
+
+/* ==========================================================
+   ANIMASI SALJU TURUN (SNOWFALL EFFECT)
+   ========================================================== */
+.snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.snow-container .snowflake {
+    position: absolute;
+    top: -10%;
+    color: #ffffff; /* Warna putih salju */
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
+    animation: snowFall linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animasi turun dari atas ke bawah secara lembut dengan efek goyang horizontal */
+@keyframes snowFall {
+    0% {
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateX(20px) rotate(180deg);
+    }
+    100% {
+        top: 105%;
+        transform: translateX(-20px) rotate(360deg);
+        opacity: 0.2;
+    }
+}
