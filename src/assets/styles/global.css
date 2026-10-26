@@ -1,5 +1,5 @@
 :root {
-    --primary-font-color: #212529; /* Diperbaiki: tanpa tanda kutip */
+    --primary-font-color: #212529;
     --bg-color: #f8f9fa;
 
     --fontSize-heading-lg: 3rem;
@@ -19,7 +19,7 @@ html {
     scrollbar-width: none !important;
 }
 
-* { /* Diperbaiki: karakter tak kasat mata dihapus */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -47,8 +47,13 @@ p {
 
 /* ==========================================================
    PENGATURAN BACKGROUND GAMBAR SETELAH HALAMAN HOME
+   (Dibatasi hanya untuk seksi bride, hadist, time, galeri, wishas)
    ========================================================== */
-main > section:not(.welcome):not(.home) {
+main > section#bride,
+main > section.hadist,
+main > section.time,
+main > section.galeri,
+main > section.wishas {
     background-image: url('../images/bg2.jpeg'); /* Ganti dengan path/lokasi gambar Anda */
     background-size: cover;
     background-position: center;
@@ -56,24 +61,35 @@ main > section:not(.welcome):not(.home) {
     position: relative;
 }
 
-/* Memberikan lapisan transparan (overlay) agar teks tetap mudah dibaca di atas gambar */
-main > section:not(.welcome):not(.home)::before {
+/* Lapisan transparan (overlay) */
+main > section#bride::before,
+main > section.hadist::before,
+main > section.time::before,
+main > section.galeri::before,
+main > section.wishas::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.85); /* Sesuaikan warna dasar & transparansi */
+    background-color: rgba(255, 255, 255, 0.85); /* Sesuaikan transparansi */
     z-index: 1;
 }
 
-/* Memastikan konten di dalam seksi tetap berada di atas lapisan overlay */
-main > section:not(.welcome):not(.home) > * {
+/* Memastikan konten di dalam seksi-seksi tersebut ada di atas overlay */
+main > section#bride > *,
+main > section.hadist > *,
+main > section.time > *,
+main > section.galeri > *,
+main > section.wishas > * {
     position: relative;
     z-index: 2;
 }
 
+/* ==========================================================
+   PENGATURAN TOMBOL AUDIO (Dibersihkan agar aman)
+   ========================================================== */
 .audio button {
     width: 2rem;
     height: 2rem;
@@ -91,7 +107,7 @@ main > section:not(.welcome):not(.home) > * {
     cursor: pointer;
     transform: translateX(200%);
     transition: 1.5s transform ease;
-    z-index: 99;
+    z-index: 9999; /* Dinaikkan agar selalu berada di lapisan paling atas */
 }
 
 .audio button.show {
@@ -119,7 +135,7 @@ main > section:not(.welcome):not(.home) > * {
 .snow-container .snowflake {
     position: absolute;
     top: -10%;
-    color: #ffffff; /* Warna putih salju */
+    color: #ffffff;
     text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     opacity: 0.9;
     animation: snowFall linear infinite;
@@ -135,7 +151,6 @@ main > section:not(.welcome):not(.home) > * {
     }
 }
 
-/* Animasi turun dari atas ke bawah secara lembut dengan efek goyang horizontal */
 @keyframes snowFall {
     0% {
         top: -10%;
