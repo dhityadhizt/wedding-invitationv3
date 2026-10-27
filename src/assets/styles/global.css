@@ -45,7 +45,7 @@ p {
 }
 
 /* ==========================================================
-   1. PENGATURAN HALAMAN HOME (TETAP TERANG & AMAN)
+   1. PENGATURAN HALAMAN HOME (TETAP TERANG)
    ========================================================== */
 section.home {
     background-color: var(--bg-color);
@@ -57,23 +57,21 @@ section.home::before {
 }
 
 /* ==========================================================
-   2. PENGATURAN BACKGROUND GAMBAR SETELAH HOME (RESPONSIF HP)
+   2. PENGATURAN BACKGROUND GAMBAR UTAMA (UNTUK PC & TABLET)
    ========================================================== */
 main > section#bride,
 main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/bg2.jpg'); /* Sesuaikan path gambar Anda */
+    background-image: url('../images/bg2.jpg'); /* Ganti dengan nama file background Anda */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    padding: 3rem 1rem; /* Menggunakan padding yang pas agar fleksibel di HP */
-    width: 100%;
 }
 
-/* Lapisan transparan overlay putih */
+/* Lapisan transparan overlay putih standar untuk PC & Tablet */
 main > section#bride::before,
 main > section.hadist::before,
 main > section.time::before,
@@ -89,7 +87,7 @@ main > section.wishas::before {
     z-index: 1;
 }
 
-/* Memastikan seluruh konten seksi berada di atas lapisan overlay */
+/* Memastikan konten di PC & Tablet berada di atas overlay */
 main > section#bride > *,
 main > section.hadist > *,
 main > section.time > *,
@@ -100,13 +98,13 @@ main > section.wishas > * {
 }
 
 /* ==========================================================
-   3. ORNAMEN PEMBATAS (BAR.PNG) DENGAN ANIMASI GOYANG HALUS
+   3. ORNAMEN PEMBATAS (BAR.PNG) DEFAULT (PC & TABLET)
    ========================================================== */
 .divider-ornament {
     display: block;
     margin: 2.5rem auto;
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
     height: auto;
     object-fit: contain;
     pointer-events: none;
@@ -114,16 +112,25 @@ main > section.wishas > * {
     animation: swaySmooth 4s ease-in-out infinite alternate;
 }
 
-/* Penyesuaian khusus layar HP agar jarak atas-bawah sangat rapat & pas */
+/* ==========================================================
+   4. PENGATURAN OTOMATIS KHUSUS HP (TIDAK MERUBAH PC & TABLET)
+   ========================================================== */
 @media screen and (max-width: 768px) {
-    .divider-ornament {
-        max-width: 350px;
-        margin: 0.5rem auto 0.5rem auto !important;
-    }
     
-    .divider-ornament.divider-spacing {
-        margin-top: 0.8rem !important;
-        margin-bottom: 0.5rem !important;
+    /* Memaksa background & tinggi seksi menyesuaikan layar HP di semua page */
+    main > section#bride,
+    main > section.hadist,
+    main > section.time,
+    main > section.galeri,
+    main > section.wishas {
+        min-height: 75vh !important;
+        padding: 3.5rem 1rem !important;
+    }
+
+    /* Ukuran dan jarak ornamen khusus HP agar rapi dan tidak terlalu jauh */
+    .divider-ornament {
+        max-width: 350px !important;
+        margin: 0.8rem auto 0.5rem auto !important;
     }
 }
 
@@ -141,7 +148,7 @@ main > section.wishas > * {
 }
 
 /* ==========================================================
-   4. TOMBOL AUDIO & SALJU
+   5. TOMBOL AUDIO & SALJU
    ========================================================== */
 .audio button {
     width: 2rem;
