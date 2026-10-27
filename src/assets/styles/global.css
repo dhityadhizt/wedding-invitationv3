@@ -69,7 +69,7 @@ main > section.wishas {
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    min-height: 100vh;
+    padding: 3rem 1rem; /* Menggunakan padding yang pas agar fleksibel di HP */
     width: 100%;
 }
 
@@ -106,7 +106,7 @@ main > section.wishas > * {
     display: block;
     margin: 2.5rem auto;
     width: 100%;
-    max-width: 500px; /* Ubah nilai ini jika ingin memperbesar ukuran desktop */
+    max-width: 450px;
     height: auto;
     object-fit: contain;
     pointer-events: none;
@@ -114,12 +114,16 @@ main > section.wishas > * {
     animation: swaySmooth 4s ease-in-out infinite alternate;
 }
 
-/* Penyesuaian khusus layar HP */
+/* Penyesuaian khusus layar HP agar jarak atas-bawah sangat rapat & pas */
 @media screen and (max-width: 768px) {
     .divider-ornament {
-        max-width: 350px; /* Ubah nilai ini jika ingin memperbesar ukuran di HP */
-        /* Mengatur jarak atas dan bawah ornamen agar lebih rapat & tidak terlalu jauh */
-        margin: 1rem auto 1rem auto !important; 
+        max-width: 350px;
+        margin: 0.5rem auto 0.5rem auto !important;
+    }
+    
+    .divider-ornament.divider-spacing {
+        margin-top: 0.8rem !important;
+        margin-bottom: 0.5rem !important;
     }
 }
 
