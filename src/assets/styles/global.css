@@ -65,7 +65,7 @@ main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/nama-gambar-anda.jpg'); /* Ganti dengan nama file background Anda */
+    background-image: url('../images/bg2.jpg'); /* Ganti dengan nama file background Anda */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
