@@ -13,78 +13,70 @@
   bottom: 0;
   z-index: 99;
   color: #1a202c;
-  
-  /* Efek Fade-In (menggantikan swipe translateY) */
+  /* Mengubah transisi dari swipe ke fade-in & scale */
   transition: opacity 1.2s ease, visibility 1.2s ease, transform 1.2s ease;
   opacity: 0;
   visibility: hidden;
-  transform: scale(1.03);
-  
+  transform: scale(1.05);
   overflow: hidden;
-  perspective: 1000px; /* Menambah dimensi 3D */
 
-  /* Background image */
+  /* Background image solid tanpa transparansi / overlay gelap (Tetap diam) */
   background-image: url('../assets/images/bg.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  
+  /* Perspektif untuk efek 3D */
+  perspective: 1000px;
 }
 
-/* Kondisi saat Welcome Aktif (Muncul dengan Fade In) */
 .welcome.active {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
 }
 
-/* Kondisi saat Welcome Ditutup */
 .welcome.hide {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
+  transform: scale(0.95);
 }
 
-/* --- Ornamen Atas & Bawah Bergerak Smooth --- */
+/* ==========================================
+   ORNAMEN 3D (BAR.PNG) ATAS & BAWAH
+   ========================================== */
 .welcome::before,
 .welcome::after {
   content: '';
   position: absolute;
-  left: 0;
-  width: 100%;
-  height: 120px; /* Sesuaikan tinggi ornamen */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px; /* Ukuran sedang, sesuaikan jika perlu */
+  height: 40px;
   background-image: url('../assets/images/bar.png');
   background-size: contain;
-  background-repeat: repeat-x;
-  z-index: 102;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 2;
   pointer-events: none;
+  /* Efek smooth transisi untuk gyroscope / pergerakan mouse */
+  transition: transform 0.1s ease-out;
 }
 
 .welcome::before {
-  top: 0;
-  animation: moveTopBar 8s ease-in-out infinite alternate;
+  top: 25px; /* Posisi atas */
 }
 
 .welcome::after {
-  bottom: 0;
-  transform: rotate(180deg);
-  animation: moveBottomBar 8s ease-in-out infinite alternate;
+  bottom: 25px; /* Posisi bawah */
+  transform: translateX(-50%) rotate(180deg); /* Opsional: dibalik agar simetris */
 }
 
-@keyframes moveTopBar {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-8px); }
-}
-
-@keyframes moveBottomBar {
-  0% { transform: rotate(180deg) translateY(0); }
-  100% { transform: rotate(180deg) translateY(-8px); }
-}
-
-/* --- Konten 3D & Estetik --- */
+/* Konten di dalam welcome diberi efek 3D mengambang halus */
 .welcome > * {
-  transform-style: preserve-3d;
-  transition: transform 0.1s ease-out; /* Untuk efek gyroscope/mouse movement */
-  z-index: 103;
+  position: relative;
+  z-index: 3;
+  transition: transform 0.1s ease-out;
 }
 
 .welcome h2 {
@@ -108,7 +100,7 @@
   height: 9rem;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   border: 3px solid #ffffff;
 }
 
@@ -139,7 +131,7 @@
   background-color: #0f172a;
   padding: 0.7rem 1.4rem;
   border: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, transform 0.1s ease-out;
   border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
@@ -150,7 +142,7 @@
 .welcome button:hover {
   color: #0f172a;
   background-color: #ffffff;
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
