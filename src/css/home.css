@@ -4,7 +4,7 @@
     text-align: center;
     
     /* Mengubah background menjadi foto background.jpeg */
-    background-image: url('../assets/images/background.jpeg');
+    background-image: url('../assets/images/background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
