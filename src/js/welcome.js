@@ -70,44 +70,50 @@ export const welcome = () => {
         });
     };
 
-    // --- Efek 3D Gyroscope KHUSUS HANYA PADA ORNAMEN ---
+    // --- Efek 3D Gyroscope & Mouse Parallax KHUSUS ORNAMEN ---
     const initGyroscopeEffect = () => {
         const ornaments = welcomeContainer.querySelectorAll('.welcome-ornament');
+        let isGyroActive = false;
 
         const applyTransform = (x, y) => {
-            ornaments.forEach(ornament => {
-                // Ornamen atas dan bawah diberi sedikit perbedaan kedalaman (depth) agar dinamis
-                const depth = ornament.classList.contains('top') ? 50 : 30;
-                ornament.style.transform = `perspective(1000px) translateZ(${depth}px) rotateY(${x}deg) rotateX(${-y}deg)`;
+            ornaments.forEach((ornament, index) => {
+                const depth = index === 0 ? 60 : 30; // Kedalaman 3D berbeda agar berlapis (parallax)
+                ornament.style.transform = `translate3d(0, 0, ${depth}px) rotateY(${x}deg) rotateX(${-y}deg)`;
             });
         };
 
-        // Gyroscope Smartphone
-        if (window.DeviceOrientationEvent) {
-            const handleOrientation = (e) => {
-                let tiltX = e.gamma; 
-                let tiltY = e.beta;  
-                
-                if (tiltX !== null && tiltY !== null) {
-                    let x = tiltX / 4; 
-                    let y = tiltY / 4;
-                    applyTransform(x, y);
-                }
-            };
-
-            if (openWeddingButton && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                openWeddingButton.addEventListener('click', () => {
-                    DeviceOrientationEvent.requestPermission().catch(() => {});
-                }, { once: true });
-            }
+        const handleOrientation = (e) => {
+            let tiltX = e.gamma; // Kiri ke kanan (-90 to 90)
+            let tiltY = e.beta;  // Depan ke belakang (-180 to 180)
             
+            if (tiltX !== null && tiltY !== null) {
+                let x = tiltX / 3;
+                let y = tiltY / 3;
+                applyTransform(x, y);
+            }
+        };
+
+        // Permintaan izin sensor untuk perangkat iOS (Safari/Chrome iOS)
+        if (openWeddingButton && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            openWeddingButton.addEventListener('click', () => {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                        if (response === 'granted' && !isGyroActive) {
+                            window.addEventListener('deviceorientation', handleOrientation);
+                            isGyroActive = true;
+                        }
+                    })
+                    .catch(() => {});
+            }, { once: true });
+        } else if (window.DeviceOrientationEvent) {
+            // Android / Browser standar
             window.addEventListener('deviceorientation', handleOrientation);
         }
 
-        // Mouse Move Desktop
+        // Mouse Parallax untuk Desktop/Laptop
         welcomeElement.addEventListener('mousemove', (e) => {
-            let x = (window.innerWidth / 2 - e.clientX) / 25;
-            let y = (window.innerHeight / 2 - e.clientY) / 25;
+            let x = (window.innerWidth / 2 - e.clientX) / 20;
+            let y = (window.innerHeight / 2 - e.clientY) / 20;
             applyTransform(x, y);
         });
 
