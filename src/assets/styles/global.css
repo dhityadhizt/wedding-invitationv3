@@ -106,7 +106,7 @@ main > section.wishas > * {
     display: block;
     margin: 2.5rem auto;
     width: 100%;
-    max-width: 300px;
+    max-width: 450px;
     height: auto;
     object-fit: contain;
     pointer-events: none;
@@ -117,7 +117,7 @@ main > section.wishas > * {
 /* Penyesuaian khusus layar HP agar ornamen tidak terlalu besar/kecil */
 @media screen and (max-width: 768px) {
     .divider-ornament {
-        max-width: 200px;
+        max-width: 300px;
         margin: 1.8rem auto;
     }
 }
