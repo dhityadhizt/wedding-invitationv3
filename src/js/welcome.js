@@ -6,20 +6,17 @@ export const welcome = () => {
     const homeElement = document.querySelector('.home');
     const navbarElement = document.querySelector('header nav');
 
-    // Buat/ambil wrapper konten 3D di dalam .welcome secara aman
     let welcomeContainer = document.getElementById('welcome3D');
     if (!welcomeContainer) {
         welcomeContainer = document.createElement('div');
         welcomeContainer.id = 'welcome3D';
         welcomeContainer.className = 'welcome-content';
-        // Pindahkan isi welcomeElement ke dalam wrapper
         while (welcomeElement.firstChild) {
             welcomeContainer.appendChild(welcomeElement.firstChild);
         }
         welcomeElement.appendChild(welcomeContainer);
     }
 
-    // Ambil elemen spesifik dari dalam wrapper konten
     const ornamentTop = welcomeContainer.querySelector('.welcome-ornament.top') || document.createElement('img');
     const ornamentBottom = welcomeContainer.querySelector('.welcome-ornament.bottom') || document.createElement('img');
     const h2Element = welcomeContainer.querySelector('h2');
@@ -55,7 +52,6 @@ export const welcome = () => {
 
     const initialAudio = () => {
         let isPlaying = false;
-
         audioMusic.innerHTML = `<source src=${data.audio} type="audio/mp3"/>`;
 
         audioButton.addEventListener('click', () => {
@@ -74,23 +70,27 @@ export const welcome = () => {
         });
     };
 
-    // --- Integrasi Efek 3D Gyroscope & Mouse Parallax (Background tetap diam) ---
+    // --- Efek 3D Gyroscope KHUSUS HANYA PADA ORNAMEN ---
     const initGyroscopeEffect = () => {
+        const ornaments = welcomeContainer.querySelectorAll('.welcome-ornament');
+
         const applyTransform = (x, y) => {
-            if (welcomeContainer) {
-                welcomeContainer.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
-            }
+            ornaments.forEach(ornament => {
+                // Ornamen atas dan bawah diberi sedikit perbedaan kedalaman (depth) agar dinamis
+                const depth = ornament.classList.contains('top') ? 50 : 30;
+                ornament.style.transform = `perspective(1000px) translateZ(${depth}px) rotateY(${x}deg) rotateX(${-y}deg)`;
+            });
         };
 
-        // Gyroscope untuk Smartphone/Mobile dengan penanganan izin iOS
+        // Gyroscope Smartphone
         if (window.DeviceOrientationEvent) {
             const handleOrientation = (e) => {
                 let tiltX = e.gamma; 
                 let tiltY = e.beta;  
                 
                 if (tiltX !== null && tiltY !== null) {
-                    let x = tiltX / 6; 
-                    let y = tiltY / 6;
+                    let x = tiltX / 4; 
+                    let y = tiltY / 4;
                     applyTransform(x, y);
                 }
             };
@@ -104,10 +104,10 @@ export const welcome = () => {
             window.addEventListener('deviceorientation', handleOrientation);
         }
 
-        // Fallback / Efek Mouse Movement untuk Desktop/Laptop
+        // Mouse Move Desktop
         welcomeElement.addEventListener('mousemove', (e) => {
-            let x = (window.innerWidth / 2 - e.clientX) / 40;
-            let y = (window.innerHeight / 2 - e.clientY) / 40;
+            let x = (window.innerWidth / 2 - e.clientX) / 25;
+            let y = (window.innerHeight / 2 - e.clientY) / 25;
             applyTransform(x, y);
         });
 
@@ -137,7 +137,6 @@ export const welcome = () => {
     }
 
     const initializeWelcome = () => {
-        // Otomatis menyisipkan ornamen bar.png jika belum ada di dalam container
         if (!welcomeContainer.querySelector('.welcome-ornament.top')) {
             ornamentTop.src = "./src/assets/images/bar.png";
             ornamentTop.alt = "Ornament Top";
