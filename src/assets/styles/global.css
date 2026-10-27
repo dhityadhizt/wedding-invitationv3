@@ -46,6 +46,18 @@ p {
 }
 
 /* ==========================================================
+   PENGATURAN HALAMAN HOME (TETAP TERANG & TIDAK GELAP)
+   ========================================================== */
+section.home {
+    background-color: var(--bg-color); /* Warna terang bawaan (#f8f9fa) */
+    position: relative;
+}
+
+section.home::before {
+    display: none; /* Memastikan tidak ada overlay gelap di home */
+}
+
+/* ==========================================================
    PENGATURAN BACKGROUND GAMBAR SETELAH HALAMAN HOME
    ========================================================== */
 main > section#bride,
@@ -53,14 +65,14 @@ main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/bg2.jpeg'); /* Ganti dengan nama file background Anda */
+    background-image: url('../images/nama-gambar-anda.jpg'); /* Ganti dengan nama file background Anda */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
 }
 
-/* Lapisan transparan (overlay) */
+/* Lapisan transparan (overlay) agar teks tetap mudah dibaca */
 main > section#bride::before,
 main > section.hadist::before,
 main > section.time::before,
@@ -72,7 +84,7 @@ main > section.wishas::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.85); /* Sesuaikan tingkat transparansi */
+    background-color: rgba(255, 255, 255, 0.85); /* Sesuaikan tingkat transparansi putih */
     z-index: 1;
 }
 
