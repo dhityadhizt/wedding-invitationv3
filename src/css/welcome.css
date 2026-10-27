@@ -1,109 +1,159 @@
 .welcome {
-width: 100%;
-height: 100vh;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-text-align: center;
-position: fixed;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-z-index: 99;
-color: #1a202c;
-transition: all 2s ease-in;
-opacity: 0;
-transform: translateY(-100%);
-overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  color: #1a202c;
+  
+  /* Efek Fade-In (menggantikan swipe translateY) */
+  transition: opacity 1.2s ease, visibility 1.2s ease, transform 1.2s ease;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.03);
+  
+  overflow: hidden;
+  perspective: 1000px; /* Menambah dimensi 3D */
 
-/* Background image solid tanpa transparansi / overlay gelap */
-background-image: url('../assets/images/bg.jpeg');
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-
-
+  /* Background image */
+  background-image: url('../assets/images/bg.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
+/* Kondisi saat Welcome Aktif (Muncul dengan Fade In) */
 .welcome.active {
-transform: translateY(0);
-opacity: 1;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
 }
 
+/* Kondisi saat Welcome Ditutup */
 .welcome.hide {
-top: -100%;
-opacity: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* --- Ornamen Atas & Bawah Bergerak Smooth --- */
+.welcome::before,
+.welcome::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 120px; /* Sesuaikan tinggi ornamen */
+  background-image: url('../assets/images/bar.png');
+  background-size: contain;
+  background-repeat: repeat-x;
+  z-index: 102;
+  pointer-events: none;
+}
+
+.welcome::before {
+  top: 0;
+  animation: moveTopBar 8s ease-in-out infinite alternate;
+}
+
+.welcome::after {
+  bottom: 0;
+  transform: rotate(180deg);
+  animation: moveBottomBar 8s ease-in-out infinite alternate;
+}
+
+@keyframes moveTopBar {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+@keyframes moveBottomBar {
+  0% { transform: rotate(180deg) translateY(0); }
+  100% { transform: rotate(180deg) translateY(-8px); }
+}
+
+/* --- Konten 3D & Estetik --- */
+.welcome > * {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out; /* Untuk efek gyroscope/mouse movement */
+  z-index: 103;
 }
 
 .welcome h2 {
-font-size: 2.8rem;
-font-family: var(--sacramento);
-font-weight: 700;
-color: #0f172a;
-text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
+  font-size: 2.8rem;
+  font-family: var(--sacramento);
+  font-weight: 700;
+  color: #0f172a;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
 }
 
 .welcome figure {
-display: inherit;
-align-items: inherit;
-justify-content: inherit;
-flex-direction: inherit;
-margin: 1rem 0;
+  display: inherit;
+  align-items: inherit;
+  justify-content: inherit;
+  flex-direction: inherit;
+  margin: 1rem 0;
 }
 
 .welcome figure img {
-width: 9rem;
-height: 9rem;
-border-radius: 50%;
-object-fit: cover;
-box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-border: 3px solid #ffffff;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 3px solid #ffffff;
 }
 
 .welcome figure figcaption {
-font-size: var(--fontSize-heading-base);
-font-family: var(--sacramento);
-font-weight: 600;
-color: #1a202c;
-margin-top: 0.5rem;
-text-shadow: 0 1px 5px rgba(255, 255, 255, 0.8);
+  font-size: var(--fontSize-heading-base);
+  font-family: var(--sacramento);
+  font-weight: 600;
+  color: #1a202c;
+  margin-top: 0.5rem;
+  text-shadow: 0 1px 5px rgba(255, 255, 255, 0.8);
 }
 
 .welcome p span {
-font-size: 2rem;
-margin: 0.8rem 0;
-display: block;
-color: #0f172a;
-font-weight: 700;
-text-shadow: 0 1px 5px rgba(255, 255, 255, 0.8);
+  font-size: 2rem;
+  margin: 0.8rem 0;
+  display: block;
+  color: #0f172a;
+  font-weight: 700;
+  text-shadow: 0 1px 5px rgba(255, 255, 255, 0.8);
 }
 
 .welcome button {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 0.5rem;
-color: #ffffff;
-background-color: #0f172a;
-padding: 0.7rem 1.4rem;
-border: none;
-transition: all 0.3s ease;
-border-radius: 20px;
-cursor: pointer;
-font-weight: 600;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #ffffff;
+  background-color: #0f172a;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  transition: all 0.3s ease;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  margin-top: 1rem;
 }
 
 .welcome button:hover {
-color: #0f172a;
-background-color: #ffffff;
-transform: translateY(-2px);
-box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  color: #0f172a;
+  background-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .welcome button i {
-font-size: 1.2rem;
+  font-size: 1.2rem;
 }
