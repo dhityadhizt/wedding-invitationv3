@@ -10,7 +10,6 @@
     --arabic: 'Noto Naskh Arabic', serif;
 
     --shadow-md: 0 0 10px rgba(0, 0, 0, 0.3);
-
     --transition-small: all .3s ease;
 }
 
@@ -46,33 +45,35 @@ p {
 }
 
 /* ==========================================================
-   PENGATURAN HALAMAN HOME (TETAP TERANG & TIDAK GELAP)
+   1. PENGATURAN HALAMAN HOME (TETAP TERANG & AMAN)
    ========================================================== */
 section.home {
-    background-color: var(--bg-color); /* Warna terang bawaan (#f8f9fa) */
+    background-color: var(--bg-color);
     position: relative;
 }
 
 section.home::before {
-    display: none; /* Memastikan tidak ada overlay gelap di home */
+    display: none;
 }
 
 /* ==========================================================
-   PENGATURAN BACKGROUND GAMBAR SETELAH HALAMAN HOME
+   2. PENGATURAN BACKGROUND GAMBAR SETELAH HOME (RESPONSIF HP)
    ========================================================== */
 main > section#bride,
 main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/bg2.jpg'); /* Ganti dengan nama file background Anda */
+    background-image: url('../images/bg2.jpg'); /* Sesuaikan path gambar Anda */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
+    min-height: 100vh; /* Memastikan elemen punya ruang render yang cukup di HP */
+    width: 100%;
 }
 
-/* Lapisan transparan (overlay) agar teks tetap mudah dibaca */
+/* Lapisan transparan overlay putih */
 main > section#bride::before,
 main > section.hadist::before,
 main > section.time::before,
@@ -84,11 +85,11 @@ main > section.wishas::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.85); /* Sesuaikan tingkat transparansi putih */
+    background-color: rgba(255, 255, 255, 0.85);
     z-index: 1;
 }
 
-/* Memastikan konten berada di atas overlay */
+/* Memastikan seluruh konten seksi berada di atas lapisan overlay */
 main > section#bride > *,
 main > section.hadist > *,
 main > section.time > *,
@@ -99,26 +100,24 @@ main > section.wishas > * {
 }
 
 /* ==========================================================
-   ORNAMEN PEMBATAS (BAR.PNG) DENGAN ANIMASI GOYANG HALUS
+   3. ORNAMEN PEMBATAS (BAR.PNG) DENGAN ANIMASI GOYANG HALUS
    ========================================================== */
 .divider-ornament {
     display: block;
-    margin: 2.5rem auto;          /* Posisi presisi di tengah secara horizontal */
+    margin: 2.5rem auto;
     width: 100%;
-    max-width: 220px;            /* Ukuran sedang ideal untuk desktop */
+    max-width: 300px;
     height: auto;
     object-fit: contain;
-    pointer-events: none;        /* Mencegah gangguan interaksi klik/scroll */
+    pointer-events: none;
     z-index: 5;
-    
-    /* Animasi bergoyang tipis & melayang secara lembut (smooth) */
     animation: swaySmooth 4s ease-in-out infinite alternate;
 }
 
-/* Penyesuaian ukuran responsif untuk HP/Layar Kecil agar tidak terpotong */
+/* Penyesuaian khusus layar HP agar ornamen tidak terlalu besar/kecil */
 @media screen and (max-width: 768px) {
     .divider-ornament {
-        max-width: 150px;        /* Ukuran proporsional untuk perangkat mobile */
+        max-width: 200px;
         margin: 1.8rem auto;
     }
 }
@@ -137,7 +136,7 @@ main > section.wishas > * {
 }
 
 /* ==========================================================
-   TOMBOL AUDIO
+   4. TOMBOL AUDIO & SALJU
    ========================================================== */
 .audio button {
     width: 2rem;
@@ -167,9 +166,6 @@ main > section.wishas > * {
     animation: rotate 3s linear infinite;
 }
 
-/* ==========================================================
-   ANIMASI SALJU TURUN (SNOWFALL EFFECT)
-   ========================================================== */
 .snow-container {
     position: fixed;
     top: 0;
