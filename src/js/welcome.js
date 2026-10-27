@@ -6,7 +6,9 @@ export const welcome = () => {
     const homeElement = document.querySelector('.home');
     const navbarElement = document.querySelector('header nav');
 
-    const [_, figureElement, weddingToElement, openWeddingButton] = welcomeElement.children;
+    // Menyesuaikan struktur anak elemen setelah penambahan ornament atas & bawah:
+    // [0] = ornament atas, [1] = h2 (The Wedding Of), [2] = figure, [3] = p (weddingToElement), [4] = button (openWeddingButton), [5] = ornament bawah
+    const [ornamentTop, h2Element, figureElement, weddingToElement, openWeddingButton, ornamentBottom] = welcomeElement.children;
     const [audioMusic, audioButton] = document.querySelector('.audio').children;
     const [iconButton] = audioButton.children;
 
@@ -55,43 +57,38 @@ export const welcome = () => {
 
     // --- Integrasi Efek 3D Gyroscope & Mouse Parallax (Background tetap diam) ---
     const initGyroscopeEffect = () => {
-        // Ambil semua elemen anak langsung di dalam .welcome kecuali background
-        const contentElements = welcomeElement.querySelectorAll('h2, figure, p, button');
+        // Ambil elemen konten utama di dalam .welcome untuk diberi efek 3D
+        const contentElements = welcomeElement.querySelectorAll('img.ornament, h2, figure, p, button');
 
-        // Fungsi helper untuk menerapkan rotasi 3D pada elemen konten
         const applyTransform = (x, y) => {
             contentElements.forEach(el => {
                 el.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
             });
         };
 
-        // Gyroscope untuk pengguna Smartphone/Mobile dengan penanganan izin iOS
+        // Gyroscope untuk Smartphone/Mobile dengan penanganan izin iOS
         if (window.DeviceOrientationEvent) {
             const handleOrientation = (e) => {
-                let tiltX = e.gamma; // Kiri-kanan (-90 hingga 90)
-                let tiltY = e.beta;  // Depan-belakang (-180 hingga 180)
+                let tiltX = e.gamma; 
+                let tiltY = e.beta;  
                 
                 if (tiltX !== null && tiltY !== null) {
-                    let x = tiltX / 6; // Sesuaikan sensitivitas
+                    let x = tiltX / 6; 
                     let y = tiltY / 6;
                     applyTransform(x, y);
                 }
             };
 
-            // Untuk iOS 13+ yang memerlukan izin eksplisit dari pengguna
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 openWeddingButton.addEventListener('click', () => {
                     DeviceOrientationEvent.requestPermission().catch(() => {});
                 }, { once: true });
-                
-                // Opsional: Bisa dipicu saat tombol buka atau interaksi pertama disentuh
-                window.addEventListener('deviceorientation', handleOrientation, { once: true });
             }
             
             window.addEventListener('deviceorientation', handleOrientation);
         }
 
-        // Fallback / Efek Mouse Movement untuk pengguna Desktop/Laptop
+        // Fallback / Efek Mouse Movement untuk Desktop/Laptop
         welcomeElement.addEventListener('mousemove', (e) => {
             let x = (window.innerWidth / 2 - e.clientX) / 40;
             let y = (window.innerHeight / 2 - e.clientY) / 40;
@@ -122,10 +119,16 @@ export const welcome = () => {
     });
 
     const initializeWelcome = () => {
+        // Otomatis menyisipkan ornamen bar.png di awal (atas) dan akhir (bawah) elemen anak .welcome jika belum ada di HTML
+        if (!welcomeElement.querySelector('.ornament-top')) {
+            ornamentTop.outerHTML = `<img src="./assets/images/bar.png" alt="Ornament" class="ornament ornament-top">`;
+            ornamentBottom.outerHTML = `<img src="./assets/images/bar.png" alt="Ornament" class="ornament ornament-bottom">`;
+        }
+
         figureElement.innerHTML = generateFigureContent(data.bride);
         generateParameterContent();
         addClassElement(welcomeElement, 'active');
-        initGyroscopeEffect(); // Menjalankan fungsi 3D & Gyroscope saat welcome dimuat
+        initGyroscopeEffect(); 
     }
 
     initializeWelcome();
