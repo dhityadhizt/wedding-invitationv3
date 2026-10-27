@@ -13,70 +13,87 @@
   bottom: 0;
   z-index: 99;
   color: #1a202c;
-  /* Mengubah transisi dari swipe ke fade-in & scale */
-  transition: opacity 1.2s ease, visibility 1.2s ease, transform 1.2s ease;
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(1.05);
   overflow: hidden;
 
-  /* Background image solid tanpa transparansi / overlay gelap (Tetap diam) */
+  /* Background image solid tanpa transparansi (Diam / Tidak ikut 3D) */
   background-image: url('../assets/images/bg.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  /* Efek Fade In awal (sembunyi) */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
   
   /* Perspektif untuk efek 3D */
   perspective: 1000px;
 }
 
+/* Saat aktif, tampilkan dengan fade-in */
 .welcome.active {
   opacity: 1;
   visibility: visible;
-  transform: scale(1);
 }
 
 .welcome.hide {
   opacity: 0;
   visibility: hidden;
-  transform: scale(0.95);
-}
-
-/* ==========================================
-   ORNAMEN 3D (BAR.PNG) ATAS & BAWAH
-   ========================================== */
-.welcome::before,
-.welcome::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 180px; /* Ukuran sedang, sesuaikan jika perlu */
-  height: 40px;
-  background-image: url('../assets/images/bar.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  z-index: 2;
   pointer-events: none;
-  /* Efek smooth transisi untuk gyroscope / pergerakan mouse */
-  transition: transform 0.1s ease-out;
 }
 
-.welcome::before {
-  top: 25px; /* Posisi atas */
+/* Container elemen konten utama dengan efek 3D Parallax & Stagger Animation */
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1.5rem;
+  transform-style: preserve-3d;
+  /* Transisi halus untuk gyroscope */
+  transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.welcome::after {
-  bottom: 25px; /* Posisi bawah */
-  transform: translateX(-50%) rotate(180deg); /* Opsional: dibalik agar simetris */
+/* --- ORNAMEN (bar.png) --- */
+.welcome-ornament {
+  width: 120px; /* Ukuran sedang */
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  /* Lapisan 3D depth */
+  transform: translateZ(30px);
 }
 
-/* Konten di dalam welcome diberi efek 3D mengambang halus */
-.welcome > * {
-  position: relative;
-  z-index: 3;
-  transition: transform 0.1s ease-out;
+.welcome.active .welcome-ornament.top {
+  opacity: 0.9;
+  transform: translateY(0) translateZ(30px);
+  transition-delay: 0.8s; /* Muncul paling terakhir setelah tombol */
+}
+
+.welcome.active .welcome-ornament.bottom {
+  opacity: 0.9;
+  transform: translateY(0) translateZ(30px);
+  transition-delay: 0.9s;
+}
+
+/* --- INFORMASI UTAMA UNDANGAN --- */
+.welcome-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(20px) translateZ(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition-delay: 0.4s; /* Muncul setelah background/container siap */
+}
+
+.welcome.active .welcome-info {
+  opacity: 1;
+  transform: translateY(0) translateZ(50px);
 }
 
 .welcome h2 {
@@ -85,14 +102,15 @@
   font-weight: 700;
   color: #0f172a;
   text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
+  margin: 0.5rem 0;
 }
 
 .welcome figure {
-  display: inherit;
-  align-items: inherit;
-  justify-content: inherit;
-  flex-direction: inherit;
-  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0.8rem 0;
 }
 
 .welcome figure img {
@@ -115,13 +133,14 @@
 
 .welcome p span {
   font-size: 2rem;
-  margin: 0.8rem 0;
+  margin: 0.5rem 0;
   display: block;
   color: #0f172a;
   font-weight: 700;
   text-shadow: 0 1px 5px rgba(255, 255, 255, 0.8);
 }
 
+/* --- TOMBOL BUKA UNDANGAN --- */
 .welcome button {
   display: flex;
   align-items: center;
@@ -131,18 +150,19 @@
   background-color: #0f172a;
   padding: 0.7rem 1.4rem;
   border: none;
-  transition: all 0.3s ease, transform 0.1s ease-out;
+  transition: all 0.3s ease, background-color 0.3s ease;
   border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   margin-top: 1rem;
+  transform: translateZ(70px); /* Lapisan 3D paling menonjol */
 }
 
 .welcome button:hover {
   color: #0f172a;
   background-color: #ffffff;
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-2px) translateZ(70px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
