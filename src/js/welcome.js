@@ -53,31 +53,53 @@ export const welcome = () => {
         });
     };
 
-    // --- Integrasi Efek 3D Gyroscope & Mouse Parallax ---
+    // --- Integrasi Efek 3D Gyroscope & Mouse Parallax (Background tetap diam) ---
     const initGyroscopeEffect = () => {
-        // Gyroscope untuk pengguna Smartphone/Mobile
+        // Ambil semua elemen anak langsung di dalam .welcome kecuali background
+        const contentElements = welcomeElement.querySelectorAll('h2, figure, p, button');
+
+        // Fungsi helper untuk menerapkan rotasi 3D pada elemen konten
+        const applyTransform = (x, y) => {
+            contentElements.forEach(el => {
+                el.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+            });
+        };
+
+        // Gyroscope untuk pengguna Smartphone/Mobile dengan penanganan izin iOS
         if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', (e) => {
+            const handleOrientation = (e) => {
                 let tiltX = e.gamma; // Kiri-kanan (-90 hingga 90)
                 let tiltY = e.beta;  // Depan-belakang (-180 hingga 180)
                 
                 if (tiltX !== null && tiltY !== null) {
-                    let x = tiltX / 5;
-                    let y = tiltY / 5;
-                    welcomeElement.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+                    let x = tiltX / 6; // Sesuaikan sensitivitas
+                    let y = tiltY / 6;
+                    applyTransform(x, y);
                 }
-            });
+            };
+
+            // Untuk iOS 13+ yang memerlukan izin eksplisit dari pengguna
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                openWeddingButton.addEventListener('click', () => {
+                    DeviceOrientationEvent.requestPermission().catch(() => {});
+                }, { once: true });
+                
+                // Opsional: Bisa dipicu saat tombol buka atau interaksi pertama disentuh
+                window.addEventListener('deviceorientation', handleOrientation, { once: true });
+            }
+            
+            window.addEventListener('deviceorientation', handleOrientation);
         }
 
         // Fallback / Efek Mouse Movement untuk pengguna Desktop/Laptop
         welcomeElement.addEventListener('mousemove', (e) => {
-            let x = (window.innerWidth / 2 - e.clientX) / 30;
-            let y = (window.innerHeight / 2 - e.clientY) / 30;
-            welcomeElement.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+            let x = (window.innerWidth / 2 - e.clientX) / 40;
+            let y = (window.innerHeight / 2 - e.clientY) / 40;
+            applyTransform(x, y);
         });
 
         welcomeElement.addEventListener('mouseleave', () => {
-            welcomeElement.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`;
+            applyTransform(0, 0);
         });
     };
 
