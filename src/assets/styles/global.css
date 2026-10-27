@@ -106,7 +106,7 @@ main > section.wishas > * {
     display: block;
     margin: 2.5rem auto;
     width: 100%;
-    max-width: 220px; /* Ubah nilai ini jika ingin memperbesar ukuran desktop */
+    max-width: 500px; /* Ubah nilai ini jika ingin memperbesar ukuran desktop */
     height: auto;
     object-fit: contain;
     pointer-events: none;
@@ -117,7 +117,7 @@ main > section.wishas > * {
 /* Penyesuaian khusus layar HP */
 @media screen and (max-width: 768px) {
     .divider-ornament {
-        max-width: 150px; /* Ubah nilai ini jika ingin memperbesar ukuran di HP */
+        max-width: 350px; /* Ubah nilai ini jika ingin memperbesar ukuran di HP */
         /* Mengatur jarak atas dan bawah ornamen agar lebih rapat & tidak terlalu jauh */
         margin: 1rem auto 1rem auto !important; 
     }
