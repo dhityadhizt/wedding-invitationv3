@@ -64,7 +64,7 @@ main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/bg2.jpg'); /* Sesuaikan path gambar Anda */
+    background-image: url('../images/bg2.jpeg'); /* Sesuaikan path gambar Anda */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
