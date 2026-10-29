@@ -24,8 +24,10 @@ export const welcome = () => {
     const weddingToElement = welcomeContainer.querySelector('p');
     const openWeddingButton = welcomeContainer.querySelector('button');
 
-    const [audioMusic, audioButton] = document.querySelector('.audio').children;
-    const [iconButton] = audioButton.children;
+    const audioElements = document.querySelector('.audio');
+    const audioMusic = audioElements ? audioElements.querySelector('audio') || audioElements.children[0] : null;
+    const audioButton = audioElements ? audioElements.querySelector('button') || audioElements.children[1] : null;
+    const iconButton = audioButton ? audioButton.querySelector('i') || audioButton.children[0] : null;
 
     const generateFigureContent = (bride) => {
         const {L: {name: brideLName}, P: {name: bridePName}, couple: coupleImage} = bride;
@@ -48,18 +50,19 @@ export const welcome = () => {
                 weddingToElement.innerHTML = `Kepada Yth Bapak/Ibu/Saudara/i<br><span>You are invited</span>`;
             }
         }
-    }
+    };
 
     const initialAudio = () => {
+        if (!audioMusic || !audioButton || !iconButton) return;
         let isPlaying = false;
-        audioMusic.innerHTML = `<source src=${data.audio} type="audio/mp3"/>`;
+        audioMusic.innerHTML = `<source src="${data.audio}" type="audio/mp3"/>`;
 
         audioButton.addEventListener('click', () => {
             if (isPlaying) {
                 addClassElement(audioButton, 'active');
                 removeClassElement(iconButton, 'bx-play-circle');
                 addClassElement(iconButton, 'bx-pause-circle');
-                audioMusic.play();
+                audioMusic.play().catch(() => {});
             } else {
                 removeClassElement(audioButton, 'active');
                 removeClassElement(iconButton, 'bx-pause-circle');
@@ -67,58 +70,6 @@ export const welcome = () => {
                 audioMusic.pause();
             }
             isPlaying = !isPlaying;
-        });
-    };
-
-    // --- Efek 3D Gyroscope & Mouse Parallax KHUSUS ORNAMEN ---
-    const initGyroscopeEffect = () => {
-        const ornaments = welcomeContainer.querySelectorAll('.welcome-ornament');
-        let isGyroActive = false;
-
-        const applyTransform = (x, y) => {
-            ornaments.forEach((ornament, index) => {
-                const depth = index === 0 ? 60 : 30; // Kedalaman 3D berbeda agar berlapis (parallax)
-                ornament.style.transform = `translate3d(0, 0, ${depth}px) rotateY(${x}deg) rotateX(${-y}deg)`;
-            });
-        };
-
-        const handleOrientation = (e) => {
-            let tiltX = e.gamma; // Kiri ke kanan (-90 to 90)
-            let tiltY = e.beta;  // Depan ke belakang (-180 to 180)
-            
-            if (tiltX !== null && tiltY !== null) {
-                let x = tiltX / 3;
-                let y = tiltY / 3;
-                applyTransform(x, y);
-            }
-        };
-
-        // Permintaan izin sensor untuk perangkat iOS (Safari/Chrome iOS)
-        if (openWeddingButton && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-            openWeddingButton.addEventListener('click', () => {
-                DeviceOrientationEvent.requestPermission()
-                    .then(response => {
-                        if (response === 'granted' && !isGyroActive) {
-                            window.addEventListener('deviceorientation', handleOrientation);
-                            isGyroActive = true;
-                        }
-                    })
-                    .catch(() => {});
-            }, { once: true });
-        } else if (window.DeviceOrientationEvent) {
-            // Android / Browser standar
-            window.addEventListener('deviceorientation', handleOrientation);
-        }
-
-        // Mouse Parallax untuk Desktop/Laptop
-        welcomeElement.addEventListener('mousemove', (e) => {
-            let x = (window.innerWidth / 2 - e.clientX) / 20;
-            let y = (window.innerHeight / 2 - e.clientY) / 20;
-            applyTransform(x, y);
-        });
-
-        welcomeElement.addEventListener('mouseleave', () => {
-            applyTransform(0, 0);
         });
     };
 
@@ -130,14 +81,16 @@ export const welcome = () => {
             setTimeout(() => {
                 addClassElement(homeElement, 'active');
                 addClassElement(navbarElement, 'active');
-                addClassElement(audioButton, 'show');
-                removeClassElement(iconButton, 'bx-play-circle');
-                addClassElement(iconButton, 'bx-pause-circle');
-                audioMusic.play();
+                if (audioButton) addClassElement(audioButton, 'show');
+                if (iconButton) {
+                    removeClassElement(iconButton, 'bx-play-circle');
+                    addClassElement(iconButton, 'bx-pause-circle');
+                }
+                if (audioMusic) audioMusic.play().catch(() => {});
             }, 1500);
 
             setTimeout(() => {
-                addClassElement(audioButton, 'active');
+                if (audioButton) addClassElement(audioButton, 'active');
             }, 3000);
         });
     }
@@ -163,9 +116,8 @@ export const welcome = () => {
         
         generateParameterContent();
         addClassElement(welcomeElement, 'active');
-        initGyroscopeEffect(); 
-    }
+    };
 
     initializeWelcome();
     initialAudio();
-}
+};
