@@ -1,236 +1,254 @@
 :root {
-    --primary-font-color: #212529;
-    --bg-color: #f8f9fa;
+  --primary-font-color: #212529;
+  --bg-color: #f8f9fa;
 
-    --fontSize-heading-lg: 3rem;
-    --fontSize-heading-base: 2.8rem;
-    --fontSize-text-base: 1rem;
+  --fontSize-heading-lg: 3rem;
+  --fontSize-heading-base: 2.8rem;
+  --fontSize-text-base: 1rem;
 
-    --sacramento: Sacramento, cursive;
-    --arabic: 'Noto Naskh Arabic', serif;
+  --sacramento: Sacramento, cursive;
+  --arabic: 'Noto Naskh Arabic', serif;
 
-    --shadow-md: 0 0 10px rgba(0, 0, 0, 0.3);
-    --transition-small: all .3s ease;
+  --shadow-md: 0 0 10px rgba(0, 0, 0, 0.3);
+  --transition-small: all 0.3s ease;
 }
 
 html {
-    scroll-behavior: smooth;
-    scrollbar-width: none !important;
+  scroll-behavior: smooth;
+  scrollbar-width: none !important;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-    outline: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  outline: none;
 }
 
 body {
-    font-family: 'Josefin Sans', sans-serif;
-    color: var(--primary-font-color);
-    overflow-y: hidden;
+  font-family: 'Josefin Sans', sans-serif;
+  color: var(--primary-font-color);
+  overflow-y: hidden;
 }
 
 body.active {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 body::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 p {
-    line-height: 1.7rem;
+  line-height: 1.7rem;
 }
 
 /* ==========================================================
    1. PENGATURAN HALAMAN HOME (TETAP TERANG & AMAN)
    ========================================================== */
 section.home {
-    background-color: var(--bg-color);
-    position: relative;
+  background-color: var(--bg-color);
+  position: relative;
 }
 
 section.home::before {
-    display: none;
+  display: none;
 }
 
 /* ==========================================================
-   2. PENGATURAN BACKGROUND GAMBAR SETELAH HOME (RESPONSIF HP)
+   2. PENGATURAN BACKGROUND GAMBAR SETELAH HOME (DENGAN EFEK FADE ATAS-BAWAH)
    ========================================================== */
 main > section#bride,
 main > section.hadist,
 main > section.time,
 main > section.galeri,
 main > section.wishas {
-    background-image: url('../images/bg2.jpeg'); /* Sesuaikan path gambar Anda */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    padding: 3rem 1rem; /* Menggunakan padding yang pas agar fleksibel di HP */
-    width: 100%;
-
-    /* Efek transparan halus pada bagian atas & bawah */
-    -webkit-mask-image: linear-gradient(
-        to bottom, 
-        rgba(0, 0, 0, 0) 0%,     /* Paling atas 100% transparan */
-        rgba(0, 0, 0, 1) 15%,    /* Mulai terlihat penuh pada 15% */
-        rgba(0, 0, 0, 1) 85%,    /* Tetap jelas hingga 85% */
-        rgba(0, 0, 0, 0) 100%    /* Paling bawah 100% transparan */
-    );
-    mask-image: linear-gradient(
-        to bottom, 
-        rgba(0, 0, 0, 0) 0%, 
-        rgba(0, 0, 0, 1) 15%, 
-        rgba(0, 0, 0, 1) 85%, 
-        rgba(0, 0, 0, 0) 100%
-    );
+  position: relative;
+  padding: 3rem 1rem;
+  width: 100%;
+  overflow: hidden; /* Mencegah elemen mask keluar batas */
 }
 
-/* Lapisan transparan overlay putih */
+/* Lapisan background gambar dengan efek fade transparan di atas & bawah */
+main > section#bride::after,
+main > section.hadist::after,
+main > section.time::after,
+main > section.galeri::after,
+main > section.wishas::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  background-image: url('../images/bg2.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  /* Efek fade transparan (Atas & Bawah memudar) */
+  -webkit-mask-image: linear-gradient(
+    to bottom, 
+    rgba(0, 0, 0, 0) 0%, 
+    rgba(0, 0, 0, 1) 15%, 
+    rgba(0, 0, 0, 1) 85%, 
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom, 
+    rgba(0, 0, 0, 0) 0%, 
+    rgba(0, 0, 0, 1) 15%, 
+    rgba(0, 0, 0, 1) 85%, 
+    rgba(0, 0, 0, 0) 100%
+  );
+  
+  z-index: 1;
+}
+
+/* Lapisan overlay putih untuk meredupkan background */
 main > section#bride::before,
 main > section.hadist::before,
 main > section.time::before,
 main > section.galeri::before,
 main > section.wishas::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.65);
-    z-index: 1;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.70);
+  z-index: 2;
 }
 
-/* Memastikan seluruh konten seksi berada di atas lapisan overlay */
+/* Memastikan seluruh konten seksi berada di atas lapisan background & overlay */
 main > section#bride > *,
 main > section.hadist > *,
 main > section.time > *,
 main > section.galeri > *,
 main > section.wishas > * {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 3;
 }
 
 /* ==========================================================
    3. ORNAMEN PEMBATAS (BAR.PNG) DENGAN ANIMASI GOYANG HALUS
    ========================================================== */
 .divider-ornament {
-    display: block;
-    margin: 2.5rem auto;
-    width: 100%;
-    max-width: 450px;
-    height: auto;
-    object-fit: contain;
-    pointer-events: none;
-    z-index: 5;
-    animation: swaySmooth 4s ease-in-out infinite alternate;
+  display: block;
+  margin: 2.5rem auto;
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 5;
+  animation: swaySmooth 4s ease-in-out infinite alternate;
 }
 
 /* Penyesuaian khusus layar HP agar jarak atas-bawah sangat rapat & pas */
 @media screen and (max-width: 768px) {
-    .divider-ornament {
-        max-width: 350px;
-        margin: 0.5rem auto 0.5rem auto !important;
-    }
-    
-    .divider-ornament.divider-spacing {
-        margin-top: 0.8rem !important;
-        margin-bottom: 0.5rem !important;
-    }
+  .divider-ornament {
+    max-width: 350px;
+    margin: 0.5rem auto 0.5rem auto !important;
+  }
+
+  .divider-ornament.divider-spacing {
+    margin-top: 0.8rem !important;
+    margin-bottom: 0.5rem !important;
+  }
 }
 
 /* Keyframe Animasi Bergoyang & Melayang Halus */
 @keyframes swaySmooth {
-    0% {
-        transform: translateY(0) rotate(-1deg) scale(1);
-    }
-    50% {
-        transform: translateY(-5px) rotate(0deg) scale(1.02);
-    }
-    100% {
-        transform: translateY(0) rotate(1deg) scale(1);
-    }
+  0% {
+    transform: translateY(0) rotate(-1deg) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0deg) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) rotate(1deg) scale(1);
+  }
 }
 
 /* ==========================================================
    4. TOMBOL AUDIO & SALJU
    ========================================================== */
 .audio button {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    border: none;
-    background-color: #fff;
-    color: #000;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    cursor: pointer;
-    transform: translateX(200%);
-    transition: 1.5s transform ease;
-    z-index: 9999;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: none;
+  background-color: #fff;
+  color: #000;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  cursor: pointer;
+  transform: translateX(200%);
+  transition: transform 1.5s ease;
+  z-index: 9999;
 }
 
 .audio button.show {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
 .audio button.active {
-    animation: rotate 3s linear infinite;
+  animation: rotate 3s linear infinite;
 }
 
 .snow-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 999;
-    overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
 }
 
 .snow-container .snowflake {
-    position: absolute;
-    top: -10%;
-    color: #ffffff;
-    text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
-    opacity: 0.9;
-    animation: snowFall linear infinite;
+  position: absolute;
+  top: -10%;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  opacity: 0.9;
+  animation: snowFall linear infinite;
 }
 
 @keyframes rotate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes snowFall {
-    0% {
-        top: -10%;
-        transform: translateX(0) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.9;
-    }
-    50% {
-        transform: translateX(20px) rotate(180deg);
-    }
-    100% {
-        top: 105%;
-        transform: translateX(-20px) rotate(360deg);
-        opacity: 0.2;
-    }
+  0% {
+    top: -10%;
+    transform: translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(20px) rotate(180deg);
+  }
+  100% {
+    top: 105%;
+    transform: translateX(-20px) rotate(360deg);
+    opacity: 0.2;
+  }
 }
