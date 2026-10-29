@@ -49,7 +49,7 @@
     <link rel="stylesheet" href="src/css/footer.css">
     <link rel="stylesheet" href="src/css/mediaQueries.css">
 
-    <title>wedding - invitation</title>
+    <title>Wedding Invitation - Ditya & Diva</title>
 </head>
 <body>
 
@@ -68,16 +68,16 @@
 </div>
 
 <header>
-    <nav role="navigation" aria-label="main bavigation"></nav>
+    <nav role="navigation" aria-label="main navigation"></nav>
 </header>
 
 <main role="main">
     <section class="welcome" aria-labelledby="welcome-title">
-        <!-- Wrapper 3D Gyroscope -->
-        <div class="welcome-content" id="welcome3D">
+        <!-- Wrapper Halaman Welcome (Gyroscope Dihapuskan) -->
+        <div class="welcome-content">
             
-            <!-- Ornamen Atas -->
-            <img src="src/assets/images/bar.png" alt="Ornament" class="welcome-ornament top">
+            <!-- Ornamen Atas dengan Efek Melayang -->
+            <img src="src/assets/images/bar.png" alt="Ornament" class="welcome-ornament top floating-ornament">
 
             <!-- Informasi Undangan Utama -->
             <div class="welcome-info">
@@ -90,8 +90,8 @@
                 </button>
             </div>
 
-            <!-- Ornamen Bawah -->
-            <img src="src/assets/images/bar.png" alt="Ornament" class="welcome-ornament bottom">
+            <!-- Ornamen Bawah dengan Efek Melayang Berlawanan Arah -->
+            <img src="src/assets/images/bar.png" alt="Ornament" class="welcome-ornament bottom floating-ornament-reverse">
 
         </div>
     </section>
@@ -109,7 +109,7 @@
             <i class="bx bx-mouse bx-fade-down" aria-hidden="true"></i>
             <span>scroll down</span>
         </div>
-        <!-- Ornamen Pengganti SVG di Home -->
+        <!-- Ornamen Pembatas di Home -->
         <img src="src/assets/images/bar.png" class="divider-ornament divider-spacing" alt="ornamen pembatas" aria-hidden="true" data-aos="zoom-in" data-aos-duration="1000">
     </section>
 
@@ -148,8 +148,7 @@
             <div data-aos="zoom-in" data-aos-duration="1000"></div>
             <div data-aos="zoom-in" data-aos-duration="1000"></div>
         </div>
-        <a href="" role="link" target="_blank" aria-label="Lihat google maps" data-aos="zoom-in"
-           data-aos-duration="1000">
+        <a href="" role="link" target="_blank" aria-label="Lihat google maps" data-aos="zoom-in" data-aos-duration="1000">
             <i class="bx bxs-map-alt" aria-hidden="true"></i>
             <span>Lihat google maps</span>
         </a>
@@ -195,20 +194,22 @@
             <h2>Ucapan & Doa</h2>
             <form>
                 <label for="name">Nama</label>
-                <input type="text" name="name" id="name" placeholder="Masukan Nama Anda" autoComplete="off" required/>
+                <input type="text" name="name" id="name" placeholder="Masukan Nama Anda" autocomplete="off" required/>
+                
                 <label for="status">Kehadiran</label>
                 <select name="status" id="status" required aria-required="true">
                     <option value="" disabled selected>Konfirmasi Kehadiran</option>
                     <option value="y">Hadir</option>
                     <option value="n">Tidak Hadir</option>
                 </select>
+
                 <label for="message">Ucapan & Doa</label>
                 <textarea
-                        name="message"
-                        id="message"
-                        placeholder="Tulis ucapan & Doa"
-                        required
-                        minlength="8"
+                    name="message"
+                    id="message"
+                    placeholder="Tulis ucapan & Doa"
+                    required
+                    minlength="8"
                 ></textarea>
                 <button type="submit">Kirim</button>
             </form>
@@ -217,7 +218,6 @@
         <div data-aos="zoom-in" data-aos-duration="1000">
             <p style="margin-bottom: 0.5rem"></p>
             <hr>
-
             <ul aria-label="list comentar"></ul>
             <hr style="margin-top: 1rem">
             <div class="button-grup">
@@ -236,20 +236,19 @@
 
     <section class="audio">
         <audio loop></audio>
-        <button type="button">
+        <button type="button" aria-label="Play/Pause Music">
             <i class="bx bx-play-circle" aria-hidden="true"></i>
         </button>
     </section>
 </main>
 
 <footer>
-    <p>Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan
-        do'a restu kepada kedua mempelai.</p>
+    <p>Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan do'a restu kepada kedua mempelai.</p>
     <h2>Wassalamu'alaikum Warahmatullahi Wabarakatuh</h2>
     <h4> اَلْحَمْدُ للَّهِ رَبِّ الْعالَمِينَ</h4>
     <div>
         <p>Build with <span>dhityadhizt</span></p>
-        <a href="https://github.com/sdprdh">
+        <a href="https://github.com/sdprdh" target="_blank" rel="noopener">
             <i class="bx bxl-github"></i>
             <span>dhityadhizt</span>
         </a>
