@@ -25,7 +25,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 1s ease, visibility 1s ease;
-  
+
   /* Perspektif 3D Utama */
   perspective: 1200px;
 }
@@ -54,28 +54,53 @@
   transform-style: preserve-3d;
 }
 
-/* --- ORNAMEN (bar.png) DENGAN EFEK 3D --- */
+/* --- ORNAMEN (bar.png) DENGAN EFEK 3D & MELAYANG --- */
 .welcome-ornament {
-  width: 450px;
+  width: 100%;
+  max-width: 400px;
   height: auto;
   object-fit: contain;
   opacity: 0;
   transform: translateY(15px);
-  /* Transisi awal saat muncul, transform real-time dipegang oleh JS */
   transition: opacity 0.8s ease, transform 0.8s ease;
   will-change: transform;
+}
+
+/* Definisi Keyframes Melayang (Floating) */
+@keyframes floatOrnamentTop {
+  0%, 100% {
+    transform: translateY(0) translateZ(60px);
+  }
+  50% {
+    transform: translateY(-8px) translateZ(60px);
+  }
+}
+
+@keyframes floatOrnamentBottom {
+  0%, 100% {
+    transform: translateY(0) translateZ(30px);
+  }
+  50% {
+    transform: translateY(8px) translateZ(30px);
+  }
 }
 
 .welcome.active .welcome-ornament.top {
   opacity: 0.9;
   transform: translateY(0) translateZ(60px);
   transition-delay: 0.6s;
+  /* Animasi melayang dimulai setelah transisi entrance selesai */
+  animation: floatOrnamentTop 4s ease-in-out infinite;
+  animation-delay: 1.4s; 
 }
 
 .welcome.active .welcome-ornament.bottom {
   opacity: 0.9;
   transform: translateY(0) translateZ(30px);
   transition-delay: 0.8s;
+  /* Animasi melayang dengan jeda waktu sedikit berbeda agar tampak natural */
+  animation: floatOrnamentBottom 4s ease-in-out infinite;
+  animation-delay: 1.6s; 
 }
 
 /* --- INFORMASI UTAMA --- */
