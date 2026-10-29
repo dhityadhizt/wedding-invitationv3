@@ -71,6 +71,22 @@ main > section.wishas {
     position: relative;
     padding: 3rem 1rem; /* Menggunakan padding yang pas agar fleksibel di HP */
     width: 100%;
+
+    /* Efek transparan halus pada bagian atas & bawah */
+    -webkit-mask-image: linear-gradient(
+        to bottom, 
+        rgba(0, 0, 0, 0) 0%,     /* Paling atas 100% transparan */
+        rgba(0, 0, 0, 1) 15%,    /* Mulai terlihat penuh pada 15% */
+        rgba(0, 0, 0, 1) 85%,    /* Tetap jelas hingga 85% */
+        rgba(0, 0, 0, 0) 100%    /* Paling bawah 100% transparan */
+    );
+    mask-image: linear-gradient(
+        to bottom, 
+        rgba(0, 0, 0, 0) 0%, 
+        rgba(0, 0, 0, 1) 15%, 
+        rgba(0, 0, 0, 1) 85%, 
+        rgba(0, 0, 0, 0) 100%
+    );
 }
 
 /* Lapisan transparan overlay putih */
