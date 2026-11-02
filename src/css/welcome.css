@@ -112,20 +112,26 @@
 
 /* Definisi Keyframes Melayang (Floating) */
 @keyframes floatOrnamentTop {
-  0%, 100% {
-    transform: translateY(0) translateZ(60px);
+  0% {
+    transform: translateY(0) rotate(-1deg) scale(1);
   }
   50% {
-    transform: translateY(-8px) translateZ(60px);
+    transform: translateY(-5px) rotate(0deg) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) rotate(1deg) scale(1);
   }
 }
 
 @keyframes floatOrnamentBottom {
-  0%, 100% {
-    transform: translateY(0) translateZ(30px);
+  0% {
+    transform: translateY(0) rotate(-1deg) scale(1);
   }
   50% {
-    transform: translateY(8px) translateZ(30px);
+    transform: translateY(-5px) rotate(0deg) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) rotate(1deg) scale(1);
   }
 }
 
