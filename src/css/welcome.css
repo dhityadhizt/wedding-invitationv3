@@ -70,70 +70,88 @@
   transition-delay: 0.8s; /* Menunggu background selesai fade-in (1s) */
 }
 
-/* --- ORNAMEN ATAS (Staggered Delay 1) --- */
+/* --- CONTAINER KONTEN --- */
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1.5rem;
+  transform-style: preserve-3d;
+}
+
+/* --- ORNAMEN ATAS (Sway Smooth Acak 1) --- */
 .welcome-ornament.top {
   width: 100%;
   max-width: 400px;
   height: auto;
   object-fit: contain;
   opacity: 0;
-  transform: translateY(-20px) translateZ(60px);
+  transform: translateY(-20px) translateZ(60px) rotate(0deg);
   transition: opacity 0.8s ease, transform 0.8s ease;
   will-change: transform;
-  transform-origin: center center;
 }
 
 .welcome.active .welcome-ornament.top {
   opacity: 0.9;
-  transform: translateY(0) translateZ(60px);
+  transform: translateY(0) translateZ(60px) rotate(0deg);
   transition-delay: 1.1s; /* Setelah informasi utama */
-  animation: swaySmoothTop 6s ease-in-out infinite;
+  /* Durasi 6s dengan variasi rotasi dan geseran acak */
+  animation: swayOrnamentTop 6s ease-in-out infinite;
   animation-delay: 1.9s; 
 }
 
-/* --- ORNAMEN BAWAH (Staggered Delay 3) --- */
+/* --- ORNAMEN BAWAH (Sway Smooth Acak 2 - Berlawanan & Berbeda Durasi) --- */
 .welcome-ornament.bottom {
   width: 100%;
   max-width: 400px;
   height: auto;
   object-fit: contain;
   opacity: 0;
-  transform: translateY(20px) translateZ(30px);
+  transform: translateY(20px) translateZ(30px) rotate(0deg);
   transition: opacity 0.8s ease, transform 0.8s ease;
   will-change: transform;
-  transform-origin: center center;
 }
 
 .welcome.active .welcome-ornament.bottom {
   opacity: 0.9;
-  transform: translateY(0) translateZ(30px);
+  transform: translateY(0) translateZ(30px) rotate(0deg);
   transition-delay: 1.4s; /* Setelah ornamen atas */
-  animation: swaySmoothBottom 6s ease-in-out infinite;
+  /* Durasi 7.5s (berbeda agar tidak sinkron/acak) dengan arah berlawanan */
+  animation: swayOrnamentBottom 7.5s ease-in-out infinite;
   animation-delay: 2.2s; 
 }
 
-/* --- KEYFRAMES SWAY SMOOTH (Mengayun & Melayang Natural) --- */
-@keyframes swaySmoothTop {
+/* --- KEYFRAMES SWAY SMOOTH ACAK & ORGANIK --- */
+@keyframes swayOrnamentTop {
   0%, 100% {
-    transform: translateY(0) rotate(0deg) translateZ(60px);
+    transform: translateY(0) translateZ(60px) rotate(0deg);
   }
-  30% {
-    transform: translateY(-6px) rotate(0.8deg) translateZ(60px);
+  25% {
+    transform: translateY(-6px) translateZ(60px) rotate(-1.2deg);
   }
-  70% {
-    transform: translateY(4px) rotate(-0.6deg) translateZ(60px);
+  50% {
+    transform: translateY(-10px) translateZ(60px) rotate(0.8deg);
+  }
+  75% {
+    transform: translateY(-4px) translateZ(60px) rotate(1deg);
   }
 }
 
-@keyframes swaySmoothBottom {
+@keyframes swayOrnamentBottom {
   0%, 100% {
-    transform: translateY(0) rotate(0deg) translateZ(30px);
+    transform: translateY(0) translateZ(30px) rotate(0deg);
   }
-  35% {
-    transform: translateY(6px) rotate(-0.7deg) translateZ(30px);
+  30% {
+    transform: translateY(8px) translateZ(30px) rotate(1.5deg);
   }
-  75% {
-    transform: translateY(-5px) rotate(0.5deg) translateZ(30px);
+  60% {
+    transform: translateY(4px) translateZ(30px) rotate(-1deg);
+  }
+  85% {
+    transform: translateY(-5px) translateZ(30px) rotate(-0.5deg);
   }
 }
 
