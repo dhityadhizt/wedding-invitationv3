@@ -70,7 +70,7 @@
   transition-delay: 0.8s; /* Menunggu background selesai fade-in (1s) */
 }
 
-/* --- 2. ORNAMEN ATAS (Muncul kedua) --- */
+/* --- ORNAMEN ATAS (Staggered Delay 1) --- */
 .welcome-ornament.top {
   width: 100%;
   max-width: 400px;
@@ -80,17 +80,18 @@
   transform: translateY(-20px) translateZ(60px);
   transition: opacity 0.8s ease, transform 0.8s ease;
   will-change: transform;
+  transform-origin: center center;
 }
 
 .welcome.active .welcome-ornament.top {
   opacity: 0.9;
   transform: translateY(0) translateZ(60px);
   transition-delay: 1.1s; /* Setelah informasi utama */
-  animation: floatOrnamentTop 4s ease-in-out infinite;
+  animation: swaySmoothTop 6s ease-in-out infinite;
   animation-delay: 1.9s; 
 }
 
-/* --- 3. ORNAMEN BAWAH (Muncul terakhir) --- */
+/* --- ORNAMEN BAWAH (Staggered Delay 3) --- */
 .welcome-ornament.bottom {
   width: 100%;
   max-width: 400px;
@@ -100,38 +101,39 @@
   transform: translateY(20px) translateZ(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
   will-change: transform;
+  transform-origin: center center;
 }
 
 .welcome.active .welcome-ornament.bottom {
   opacity: 0.9;
   transform: translateY(0) translateZ(30px);
   transition-delay: 1.4s; /* Setelah ornamen atas */
-  animation: floatOrnamentBottom 4s ease-in-out infinite;
+  animation: swaySmoothBottom 6s ease-in-out infinite;
   animation-delay: 2.2s; 
 }
 
-/* Definisi Keyframes Melayang (Floating) */
-@keyframes floatOrnamentTop {
-  0% {
-    transform: translateY(0) rotate(-1deg) scale(1);
+/* --- KEYFRAMES SWAY SMOOTH (Mengayun & Melayang Natural) --- */
+@keyframes swaySmoothTop {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) translateZ(60px);
   }
-  50% {
-    transform: translateY(-5px) rotate(0deg) scale(1.02);
+  30% {
+    transform: translateY(-6px) rotate(0.8deg) translateZ(60px);
   }
-  100% {
-    transform: translateY(0) rotate(1deg) scale(1);
+  70% {
+    transform: translateY(4px) rotate(-0.6deg) translateZ(60px);
   }
 }
 
-@keyframes floatOrnamentBottom {
-  0% {
-    transform: translateY(0) rotate(-1deg) scale(1);
+@keyframes swaySmoothBottom {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) translateZ(30px);
   }
-  50% {
-    transform: translateY(-5px) rotate(0deg) scale(1.02);
+  35% {
+    transform: translateY(6px) rotate(-0.7deg) translateZ(30px);
   }
-  100% {
-    transform: translateY(0) rotate(1deg) scale(1);
+  75% {
+    transform: translateY(-5px) rotate(0.5deg) translateZ(30px);
   }
 }
 
