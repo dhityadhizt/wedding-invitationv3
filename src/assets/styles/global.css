@@ -48,7 +48,8 @@ p {
    1. PENGATURAN HALAMAN HOME (TETAP TERANG & AMAN)
    ========================================================== */
 section.home {
-  background-color: var(--bg-color);
+  background-color: #ffffff; /* Diubah menjadi putih bersih */
+  /* Atau gunakan warna lain, misal: background-color: #fcf8f5; (nuansa krem lembut) */
   position: relative;
 }
 
