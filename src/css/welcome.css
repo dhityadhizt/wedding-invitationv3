@@ -82,7 +82,30 @@
   transform-style: preserve-3d;
 }
 
-/* --- ORNAMEN ATAS (Sway Smooth Tanpa Jeda) --- */
+/* --- CONTAINER KONTEN --- */
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1.5rem;
+  transform-style: preserve-3d;
+}
+
+/* --- ORNAMEN ATAS (Sway Smooth Acak 1) --- */
+.welcome-ornament.top {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(-20px) translateZ(60px) rotate(0deg);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: transform;
+}
+
 .welcome.active .welcome-ornament.top {
   opacity: 0.9;
   transform: translateY(0) translateZ(60px) rotate(0deg);
@@ -92,7 +115,18 @@
   animation-delay: 1.9s; 
 }
 
-/* --- ORNAMEN BAWAH (Sway Smooth Tanpa Jeda) --- */
+/* --- ORNAMEN BAWAH (Sway Smooth Acak 2 - Berlawanan & Berbeda Durasi) --- */
+.welcome-ornament.bottom {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(20px) translateZ(30px) rotate(0deg);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: transform;
+}
+
 .welcome.active .welcome-ornament.bottom {
   opacity: 0.9;
   transform: translateY(0) translateZ(30px) rotate(0deg);
@@ -101,7 +135,7 @@
   animation-delay: 2.2s; 
 }
 
-/* --- KEYFRAMES SIMETRIS UNTUK MENGHILANGKAN JEDA --- */
+/* --- KEYFRAMES SWAY SMOOTH ACAK & ORGANIK --- */
 @keyframes swayOrnamentTop {
   0%, 100% {
     transform: translateY(0) translateZ(60px) rotate(0deg);
