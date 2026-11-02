@@ -6,23 +6,14 @@ export const welcome = () => {
     const homeElement = document.querySelector('.home');
     const navbarElement = document.querySelector('header nav');
 
-    let welcomeContainer = document.getElementById('welcome3D');
-    if (!welcomeContainer) {
-        welcomeContainer = document.createElement('div');
-        welcomeContainer.id = 'welcome3D';
-        welcomeContainer.className = 'welcome-content';
-        while (welcomeElement.firstChild) {
-            welcomeContainer.appendChild(welcomeElement.firstChild);
-        }
-        welcomeElement.appendChild(welcomeContainer);
-    }
-
-    const ornamentTop = welcomeContainer.querySelector('.welcome-ornament.top') || document.createElement('img');
-    const ornamentBottom = welcomeContainer.querySelector('.welcome-ornament.bottom') || document.createElement('img');
-    const h2Element = welcomeContainer.querySelector('h2');
-    const figureElement = welcomeContainer.querySelector('figure');
-    const weddingToElement = welcomeContainer.querySelector('p');
-    const openWeddingButton = welcomeContainer.querySelector('button');
+    // Mengambil elemen yang sudah ada di index.html (Tidak dibungkus ulang otomatis)
+    const welcomeContainer = document.querySelector('.welcome-content');
+    const ornamentTop = welcomeContainer ? welcomeContainer.querySelector('.welcome-ornament.top') : null;
+    const ornamentBottom = welcomeContainer ? welcomeContainer.querySelector('.welcome-ornament.bottom') : null;
+    const welcomeInfo = welcomeContainer ? welcomeContainer.querySelector('.welcome-info') : null;
+    
+    const figureElement = welcomeInfo ? welcomeInfo.querySelector('figure') : null;
+    const weddingToElement = welcomeInfo ? welcomeInfo.querySelector('p') : null;
 
     const audioElements = document.querySelector('.audio');
     const audioMusic = audioElements ? audioElements.querySelector('audio') || audioElements.children[0] : null;
@@ -73,6 +64,7 @@ export const welcome = () => {
         });
     };
 
+    const openWeddingButton = welcomeInfo ? welcomeInfo.querySelector('button') : null;
     if (openWeddingButton) {
         openWeddingButton.addEventListener('click', () => {
             addClassElement(document.body, 'active');
@@ -96,18 +88,14 @@ export const welcome = () => {
     }
 
     const initializeWelcome = () => {
-        if (!welcomeContainer.querySelector('.welcome-ornament.top')) {
+        if (ornamentTop && !ornamentTop.src) {
             ornamentTop.src = "./src/assets/images/bar.png";
             ornamentTop.alt = "Ornament Top";
-            ornamentTop.className = "welcome-ornament top";
-            welcomeContainer.prepend(ornamentTop);
         }
 
-        if (!welcomeContainer.querySelector('.welcome-ornament.bottom')) {
+        if (ornamentBottom && !ornamentBottom.src) {
             ornamentBottom.src = "./src/assets/images/bar.png";
             ornamentBottom.alt = "Ornament Bottom";
-            ornamentBottom.className = "welcome-ornament bottom";
-            welcomeContainer.appendChild(ornamentBottom);
         }
 
         if (figureElement) {
@@ -115,6 +103,8 @@ export const welcome = () => {
         }
         
         generateParameterContent();
+        
+        // Memicu kelas active agar animasi CSS berjalan sesuai urutan
         addClassElement(welcomeElement, 'active');
     };
 
