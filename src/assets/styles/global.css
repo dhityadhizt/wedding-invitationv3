@@ -45,20 +45,7 @@ p {
 }
 
 /* ==========================================================
-   1. PENGATURAN HALAMAN HOME (TETAP TERANG & AMAN)
-   ========================================================== */
-section.home {
-  background-color: #ffffff; /* Diubah menjadi putih bersih */
-  /* Atau gunakan warna lain, misal: background-color: #fcf8f5; (nuansa krem lembut) */
-  position: relative;
-}
-
-section.home::before {
-  display: none;
-}
-
-/* ==========================================================
-   2. PENGATURAN BACKGROUND GAMBAR SETELAH HOME (DENGAN EFEK FADE ATAS-BAWAH)
+   1. PENGATURAN BACKGROUND GAMBAR SETELAH HOME (DENGAN EFEK FADE ATAS-BAWAH)
    ========================================================== */
 main > section#bride,
 main > section.hadist,
@@ -135,7 +122,7 @@ main > section.wishas > * {
 }
 
 /* ==========================================================
-   3. ORNAMEN PEMBATAS (BAR.PNG) DENGAN ANIMASI GOYANG HALUS
+   2. ORNAMEN PEMBATAS (BAR.PNG) DENGAN ANIMASI GOYANG HALUS
    ========================================================== */
 .divider-ornament {
   display: block;
@@ -176,7 +163,7 @@ main > section.wishas > * {
 }
 
 /* ==========================================================
-   4. TOMBOL AUDIO & SALJU
+   3. TOMBOL AUDIO & SALJU
    ========================================================== */
 .audio button {
   width: 2rem;
