@@ -16,7 +16,7 @@ export const data = {
             mother: 'Gesti',
             image: './src/assets/images/cewe.png'
         },
-        couple: './src/assets/images/couple.png'
+        couple: './src/assets/images/couplenew.jpeg'
     },
     time: {
         marriage: {
