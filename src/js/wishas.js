@@ -1,193 +1,62 @@
-import {
-    formattedDate,
-    formattedName,
-    generateRandomColor,
-    generateRandomId,
-    getCurrentDateTime,
-    renderElement
-} from "../utils/helper.js";
-import {data} from "../assets/data/data.js";
-import {comentarService} from "../services/comentarService.js";
+import { comentarService } from "./comentarService.js";
 
-export const wishas = () => {
-    const wishasContainer = document.querySelector('.wishas');
-    const [_, form] = wishasContainer.children[2].children;
-    const [peopleComentar, ___, containerComentar] = wishasContainer.children[3].children;
-    const buttonForm = form.children[6];
-    const pageNumber = wishasContainer.querySelector('.page-number');
-    const [prevButton, nextButton] = wishasContainer.querySelectorAll('.button-grup button');
+export function wishas() {
+    const form = document.querySelector(".wishas form");
+    
+    // Jika form tidak ditemukan di HTML, hentikan fungsi agar tidak error
+    if (!form) return;
 
-    let lengthComentar = 0;
-    let currentPage = 1;
-    let itemsPerPage = 4;
-    let startIndex = 0;
-    let endIndex = itemsPerPage;
-
-    const listItemBank = (data) => (
-        `<figure data-aos="zoom-in" data-aos-duration="1000">
-            <img src=${data.icon} alt="bank icon animation">
-            <figcaption>No. Rekening ${data.rekening.slice(0, 4)}xxxx <br>A.n ${data.name}</figcaption>
-            <button data-rekening=${data.rekening} aria-label="copy rekening">Salin No. Rekening</button>
-         </figure>`
-    );
-
-    const initialBank = () => {
-        const wishasBank = wishasContainer.children[1];
-        const [_, __, containerBank] = wishasBank.children;
-
-        renderElement(data.bank, containerBank, listItemBank);
-
-        containerBank.querySelectorAll('button').forEach((button) => {
-            button.addEventListener('click', async (e) => {
-                const rekening = e.target.dataset.rekening;
-                try {
-                    await navigator.clipboard.writeText(rekening);
-                    button.textContent = 'Berhasil menyalin';
-                } catch (error) {
-                    console.log(`Error : ${error.message}`);
-                } finally {
-                    setTimeout(() => {
-                        button.textContent = 'Salin No. Rekening';
-                    }, 2000);
-                }
-            });
-        });
-    };
-
-    const listItemComentar = (data) => {
-        const name = formattedName(data.name);
-        const newDate = formattedDate(data.date);
-        let date = "";
-
-        if (newDate.days < 1) {
-            if (newDate.hours < 1) {
-                date = `${newDate.minutes} menit yang lalu`;
-            } else {
-                date = `${newDate.hours} jam, ${newDate.minutes} menit yang lalu`;
-            }
-        } else {
-            date = `${newDate.days} hari, ${newDate.hours} jam yang lalu`;
-        }
-
-        return `<li data-aos="zoom-in" data-aos-duration="1000">
-                     <div style="background-color: ${data.color}">${data.name.charAt(0).toUpperCase()}</div>
-                     <div>
-                         <h4>${name}</h4>
-                         <p>${date} <br>${data.status}</p>
-                         <p>${data.message}</p>
-                     </div>
-                   </li>`;
-    };
-
-    const initialComentar = async () => {
-        containerComentar.innerHTML = `<h1 style="font-size: 1rem; margin: auto">Loading...</h1>`;
-        peopleComentar.textContent = '...';
-        pageNumber.textContent = '..';
-
-        try {
-            const response = await comentarService.getComentar();
-            const {comentar} = response;
-
-            lengthComentar = comentar.length;
-            comentar.reverse();
-
-            if (lengthComentar > 0) {
-                peopleComentar.textContent = `${lengthComentar} Orang telah mengucapkan`;
-            } else {
-                peopleComentar.textContent = `Belum ada yang mengucapkan`;
-            }
-
-            pageNumber.textContent = currentPage.toString();
-            renderElement(comentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
-        } catch (error) {
-            console.error(`Error : ${error.message}`);
-            containerComentar.innerHTML = `<h1 style="font-size: 0.9rem; margin: auto; color: red;">Gagal memuat ucapan.</h1>`;
-        }
-    };
-
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async function (e) {
+        // --- 1. WAJIB: Cegah halaman reload/refresh bawaan browser ---
         e.preventDefault();
-        buttonForm.textContent = 'Loading...';
-        buttonForm.disabled = true;
 
-        const comentar = {
-            id: generateRandomId(),
-            name: e.target.name.value,
-            status: e.target.status.value === 'y' ? 'Hadir' : 'Tidak Hadir',
-            message: e.target.message.value,
-            date: getCurrentDateTime(),
-            color: generateRandomColor(),
+        const nameInput = document.getElementById("name");
+        const statusInput = document.getElementById("status");
+        const messageInput = document.getElementById("message");
+        const submitBtn = form.querySelector("button[type='submit']");
+
+        // Validasi input kosong
+        if (!nameInput.value || !statusInput.value || !messageInput.value) {
+            alert("Mohon lengkapi semua kolom ucapan dan kehadiran!");
+            return;
+        }
+
+        const payload = {
+            id: 'id_' + Date.now(),
+            name: nameInput.value,
+            status: statusInput.value,
+            message: messageInput.value,
+            date: new Date().toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            }),
+            color: '#333333'
         };
 
         try {
-            await comentarService.addComentar(comentar);
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Mengirim...";
 
-            // Reset ke halaman pertama agar komentar terbaru langsung terlihat di atas
-            currentPage = 1;
-            startIndex = 0;
-            endIndex = itemsPerPage;
+            // Kirim data ke Google Apps Script
+            await comentarService.addComentar(payload);
 
-            await initialComentar();
-            alert("Ucapan & konfirmasi kehadiran berhasil dikirim!");
-        } catch (error) {
-            console.error(`Error : ${error.message}`);
-            alert("Terjadi kesalahan saat mengirim ucapan.");
-        } finally {
-            buttonForm.textContent = 'Kirim';
-            buttonForm.disabled = false;
+            alert("Terima kasih! Ucapan & kehadiran berhasil dikirim.");
             form.reset();
 
-            // Kembalikan nama jika berasal dari parameter URL ?to=
+            // Kembalikan nama tamu ke form jika ada parameter URL ?to=...
             const urlParams = new URLSearchParams(window.location.search);
             const recipientName = urlParams.get('to');
-            if (recipientName) {
-                const nameInput = document.getElementById('name');
-                if (nameInput) nameInput.value = recipientName;
+            if (recipientName && nameInput) {
+                nameInput.value = recipientName;
             }
-        }
-    });
 
-    const updatePageContent = async () => {
-        containerComentar.innerHTML = '<h1 style="font-size: 1rem; margin: auto">Loading...</h1>';
-        pageNumber.textContent = '..';
-        prevButton.disabled = true;
-        nextButton.disabled = true;
-
-        try {
-            const response = await comentarService.getComentar();
-            const {comentar} = response;
-
-            lengthComentar = comentar.length;
-            comentar.reverse();
-
-            renderElement(comentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
-            pageNumber.textContent = currentPage.toString();
         } catch (error) {
-            console.log(error);
+            console.error("Gagal mengirim:", error);
+            alert("Gagal mengirim data. Periksa koneksi atau URL Apps Script Anda.");
         } finally {
-            prevButton.disabled = false;
-            nextButton.disabled = false;
-        }
-    };
-
-    nextButton.addEventListener('click', async () => {
-        if (endIndex < lengthComentar) {
-            currentPage++;
-            startIndex = (currentPage - 1) * itemsPerPage;
-            endIndex = startIndex + itemsPerPage;
-            await updatePageContent();
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Kirim";
         }
     });
-
-    prevButton.addEventListener('click', async () => {
-        if (currentPage > 1) {
-            currentPage--;
-            startIndex = (currentPage - 1) * itemsPerPage;
-            endIndex = startIndex + itemsPerPage;
-            await updatePageContent();
-        }
-    });
-
-    initialComentar().then();
-    initialBank();
-};
+}
