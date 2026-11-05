@@ -17,12 +17,18 @@ export const wishas = () => {
     const pageNumber = wishasContainer.querySelector('.page-number');
     const [prevButton, nextButton] = wishasContainer.querySelectorAll('.button-grup button');
 
+    let lengthComentar = 0;
+    let currentPage = 1;
+    let itemsPerPage = 4;
+    let startIndex = 0;
+    let endIndex = itemsPerPage;
+
     const listItemBank = (data) => (
-        `  <figure data-aos="zoom-in" data-aos-duration="1000">
-                <img src=${data.icon} alt="bank icon animation">
-                <figcaption>No. Rekening ${data.rekening.slice(0, 4)}xxxx <br>A.n ${data.name}</figcaption>
-                <button data-rekening=${data.rekening} aria-label="copy rekening">Salin No. Rekening</button>
-           </figure>`
+        `<figure data-aos="zoom-in" data-aos-duration="1000">
+            <img src=${data.icon} alt="bank icon animation">
+            <figcaption>No. Rekening ${data.rekening.slice(0, 4)}xxxx <br>A.n ${data.name}</figcaption>
+            <button data-rekening=${data.rekening} aria-label="copy rekening">Salin No. Rekening</button>
+         </figure>`
     );
 
     const initialBank = () => {
@@ -63,17 +69,15 @@ export const wishas = () => {
             date = `${newDate.days} hari, ${newDate.hours} jam yang lalu`;
         }
 
-        return ` <li data-aos="zoom-in" data-aos-duration="1000">
+        return `<li data-aos="zoom-in" data-aos-duration="1000">
                      <div style="background-color: ${data.color}">${data.name.charAt(0).toUpperCase()}</div>
                      <div>
                          <h4>${name}</h4>
                          <p>${date} <br>${data.status}</p>
                          <p>${data.message}</p>
                      </div>
-                 </li>`;
+                   </li>`;
     };
-
-    let lengthComentar;
 
     const initialComentar = async () => {
         containerComentar.innerHTML = `<h1 style="font-size: 1rem; margin: auto">Loading...</h1>`;
@@ -87,22 +91,24 @@ export const wishas = () => {
             lengthComentar = comentar.length;
             comentar.reverse();
 
-            if (comentar.length > 0) {
-                peopleComentar.textContent = `${comentar.length} Orang telah mengucapkan`;
+            if (lengthComentar > 0) {
+                peopleComentar.textContent = `${lengthComentar} Orang telah mengucapkan`;
             } else {
                 peopleComentar.textContent = `Belum ada yang mengucapkan`;
             }
 
-            pageNumber.textContent = '1';
+            pageNumber.textContent = currentPage.toString();
             renderElement(comentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
         } catch (error) {
-            return `Error : ${error.message}`;
+            console.error(`Error : ${error.message}`);
+            containerComentar.innerHTML = `<h1 style="font-size: 0.9rem; margin: auto; color: red;">Gagal memuat ucapan.</h1>`;
         }
     };
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         buttonForm.textContent = 'Loading...';
+        buttonForm.disabled = true;
 
         const comentar = {
             id: generateRandomId(),
@@ -114,27 +120,32 @@ export const wishas = () => {
         };
 
         try {
-            const response = await comentarService.getComentar();
-
             await comentarService.addComentar(comentar);
 
-            lengthComentar = response.comentar.length;
+            // Reset ke halaman pertama agar komentar terbaru langsung terlihat di atas
+            currentPage = 1;
+            startIndex = 0;
+            endIndex = itemsPerPage;
 
-            peopleComentar.textContent = `${++response.comentar.length} Orang telah mengucapkan`;
-            containerComentar.insertAdjacentHTML('afterbegin', listItemComentar(comentar));
+            await initialComentar();
+            alert("Ucapan & konfirmasi kehadiran berhasil dikirim!");
         } catch (error) {
-            return `Error : ${error.message}`;
+            console.error(`Error : ${error.message}`);
+            alert("Terjadi kesalahan saat mengirim ucapan.");
         } finally {
             buttonForm.textContent = 'Kirim';
+            buttonForm.disabled = false;
             form.reset();
+
+            // Kembalikan nama jika berasal dari parameter URL ?to=
+            const urlParams = new URLSearchParams(window.location.search);
+            const recipientName = urlParams.get('to');
+            if (recipientName) {
+                const nameInput = document.getElementById('name');
+                if (nameInput) nameInput.value = recipientName;
+            }
         }
     });
-
-    // click prev & next
-    let currentPage = 1;
-    let itemsPerPage = 4;
-    let startIndex = 0;
-    let endIndex = itemsPerPage;
 
     const updatePageContent = async () => {
         containerComentar.innerHTML = '<h1 style="font-size: 1rem; margin: auto">Loading...</h1>';
@@ -146,6 +157,7 @@ export const wishas = () => {
             const response = await comentarService.getComentar();
             const {comentar} = response;
 
+            lengthComentar = comentar.length;
             comentar.reverse();
 
             renderElement(comentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
@@ -156,10 +168,10 @@ export const wishas = () => {
             prevButton.disabled = false;
             nextButton.disabled = false;
         }
-    }
+    };
 
     nextButton.addEventListener('click', async () => {
-        if (endIndex <= lengthComentar) {
+        if (endIndex < lengthComentar) {
             currentPage++;
             startIndex = (currentPage - 1) * itemsPerPage;
             endIndex = startIndex + itemsPerPage;
