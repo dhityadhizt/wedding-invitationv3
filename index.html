@@ -83,7 +83,12 @@
             <div class="welcome-info">
                 <h2 id="welcome-title" class="welcome-item">The Wedding Of</h2>
                 <figure class="welcome-item"></figure>
-                <p class="welcome-item"></p>
+                <!-- Menambahkan elemen untuk menampilkan nama tamu undangan secara dinamis -->
+                <div class="welcome-item guest-wrapper">
+                    <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
+                    <h3 id="guest-name" style="margin: 0.5rem 0; font-weight: bold;">Tamu Undangan</h3>
+                    <p style="font-size: 0.9rem;">Di Tempat</p>
+                </div>
                 <div class="welcome-item">
                     <button type="button" aria-label="Buka Undangan">
                         <i class="bx bxs-envelope-open"></i>
@@ -196,6 +201,7 @@
             <h2>Ucapan & Doa</h2>
             <form>
                 <label for="name">Nama</label>
+                <!-- ID name ini yang nanti otomatis terisi dari URL parameter ?to=... -->
                 <input type="text" name="name" id="name" placeholder="Masukan Nama Anda" autocomplete="off" required/>
                 
                 <label for="status">Kehadiran</label>
@@ -256,6 +262,28 @@
         </a>
     </div>
 </footer>
+
+<!-- Skrip tambahan di bawah untuk menangani parameter URL ?to=Nama -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipientName = urlParams.get("to");
+
+        if (recipientName) {
+            // Tampilkan nama tamu pada elemen sambutan
+            const guestElement = document.getElementById("guest-name");
+            if (guestElement) {
+                guestElement.textContent = recipientName;
+            }
+
+            // Masukkan otomatis ke form RSVP input nama
+            const nameInput = document.getElementById("name");
+            if (nameInput) {
+                nameInput.value = recipientName;
+            }
+        }
+    });
+</script>
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script src="src/main.js" type="module"></script>
