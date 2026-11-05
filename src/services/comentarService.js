@@ -21,17 +21,17 @@ export const comentarService = {
         };
 
         try {
+            // Hapus mode: 'no-cors' agar response JSON dari Apps Script bisa terbaca,
+            // dan gunakan header text/plain untuk melewati preflight CORS Google.
             const response = await fetch(data.api, {
                 method: 'POST',
-                mode: 'no-cors',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain;charset=utf-8',
                 },
                 body: JSON.stringify(comentar),
             });
 
             return await response.json();
-
         } catch (error) {
             console.error('Post error:', error);
             return {error: error.message};
