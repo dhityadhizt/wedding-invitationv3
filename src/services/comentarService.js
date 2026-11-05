@@ -21,6 +21,7 @@ export const comentarService = {
         };
 
         try {
+            // Mengirim data menggunakan mode 'no-cors' agar lolos dari pembatasan CORS Google Apps Script
             const response = await fetch(data.api, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -30,11 +31,13 @@ export const comentarService = {
                 body: JSON.stringify(comentar),
             });
 
-            return await response.json();
+            // Karena mode 'no-cors' membuat response menjadi opaque (tidak bisa dibaca .json()),
+            // kita cukup kembalikan status sukses secara manual jika request terkirim tanpa error jaringan.
+            return { status: 200, message: 'Data berhasil dikirim' };
 
         } catch (error) {
             console.error('Post error:', error);
-            return {error: error.message};
+            return { error: error.message };
         }
     },
 };
