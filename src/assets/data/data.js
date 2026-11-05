@@ -4,7 +4,7 @@ export const data = {
             id: 1,
             name: 'Aditya Putera Prakosa',
             child: 'Putra Pertama',
-            father: 'Ahdiat U.P.',
+            father: 'Ahdiat U.P. S.Ag',
             mother: 'Ratna T.W.',
             image: './src/assets/images/cowo.png'
         },
@@ -12,8 +12,8 @@ export const data = {
             id: 2,
             name: 'Diva Farenta Setia W.',
             child: 'Putri Pertama',
-            father: 'Agus',
-            mother: 'Gesti',
+            father: 'Agus Prasetyo',
+            mother: 'Setyowati',
             image: './src/assets/images/cewe.png'
         },
         couple: './src/assets/images/couplenew.jpeg'
@@ -28,7 +28,7 @@ export const data = {
                 start: '08.00',
                 finish: 'Selesai'
             },
-            address: 'Grobogan, Purwodadi', // <-- Alamat Khusus Akad & Resepsi
+            address: 'Dusun Kapung RT2/RW4, Kec.Tanggungharjo, Kab.Grobogan', // <-- Alamat Khusus Akad & Resepsi
             map: 'https://maps.app.goo.gl/rKz1hYi5S4eSR8zN9?g_st=ic' // <-- Link Google Maps Akad
         },
         reception: {
