@@ -12,18 +12,16 @@ import {comentarService} from "../services/comentarService.js";
 export const wishas = () => {
     const wishasContainer = document.querySelector('.wishas');
     
-    // Perbaikan: Gunakan querySelector langsung ke form agar tidak bergantung pada urutan .children index
-    const form = wishasContainer.querySelector('form') || wishasContainer.children[1].querySelector('form');
-    
-    // Ambil tombol submit dari dalam form secara spesifik
+    // 1. Ambil form secara spesifik agar tidak terpengaruh pergeseran struktur HTML
+    const form = wishasContainer.querySelector('form');
     const buttonForm = form ? form.querySelector('button[type="submit"]') : null;
 
-    // Bagian komentar list (sesuaikan dengan struktur HTML section komentar kamu)
-    const commentSection = wishasContainer.querySelectorAll('div')[2] || wishasContainer.lastElementChild;
-    const peopleComentar = commentSection.querySelector('p') || commentSection.children[0];
-    const containerComentar = commentSection.querySelector('ul');
-    const pageNumber = commentSection.querySelector('.page-number');
-    const [prevButton, nextButton] = commentSection.querySelectorAll('.button-grup button');
+    // 2. Ambil elemen-elemen komentar menggunakan querySelector spesifik (Kelas/Atribut)
+    const peopleComentar = wishasContainer.querySelector('.wishas-count') || wishasContainer.querySelector('div:nth-of-type(3) p, div:nth-of-type(2) p');
+    const containerComentar = wishasContainer.querySelector('ul[aria-label="list comentar"]');
+    const pageNumber = wishasContainer.querySelector('.page-number');
+    const prevButton = wishasContainer.querySelector('.button-grup button:first-child');
+    const nextButton = wishasContainer.querySelector('.button-grup button:last-child');
 
     const listItemBank = (data) => (
         ` <figure data-aos="zoom-in" data-aos-duration="1000">
@@ -34,8 +32,8 @@ export const wishas = () => {
     );
 
     const initialBank = () => {
-        const wishasBank = wishasContainer.children[0];
-        const containerBank = wishasBank.querySelector('div:last-child') || wishasBank.children[2];
+        // Cari container bank secara aman
+        const containerBank = wishasContainer.querySelector('div:first-of-type div') || wishasContainer.children[0].querySelector('div:last-child');
 
         if (containerBank && data.bank) {
             renderElement(data.bank, containerBank, listItemBank);
@@ -92,14 +90,16 @@ export const wishas = () => {
     const initialComentar = async () => {
         if (!containerComentar) return;
         containerComentar.innerHTML = `<h1 style="font-size: 1rem; margin: auto">Loading...</h1>`;
-        if (peopleComentar) peopleComentar.textContent = '...';
         if (pageNumber) pageNumber.textContent = '..';
 
         try {
             const response = await comentarService.getComentar();
             const {comentar} = response || {};
 
-            if (!comentar) return;
+            if (!comentar) {
+                containerComentar.innerHTML = `<h1 style="font-size: 1rem; margin: auto">Gagal memuat komentar</h1>`;
+                return;
+            }
 
             lengthComentar = comentar.length;
             const reversedComentar = [...comentar].reverse();
@@ -110,16 +110,19 @@ export const wishas = () => {
                     : `Belum ada yang mengucapkan`;
             }
 
-            if (pageNumber) pageNumber.textContent = '1';
+            if (pageNumber) pageNumber.textContent = currentPage.toString();
             renderElement(reversedComentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
         } catch (error) {
             console.log(`Error : ${error.message}`);
+            if (containerComentar) {
+                containerComentar.innerHTML = `<h1 style="font-size: 1rem; margin: auto">Terjadi kesalahan</h1>`;
+            }
         }
     };
 
     if (form) {
         form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Mencegah reload halaman dan pengiriman parameter GET ke URL
+            e.preventDefault(); // Mencegah reload dan parameter GET di URL
             
             if (buttonForm) buttonForm.textContent = 'Loading...';
 
@@ -133,10 +136,15 @@ export const wishas = () => {
             };
 
             try {
+                // Kirim data ke Google Sheets
                 await comentarService.addComentar(comentar);
                 
-                // Refresh data komentar setelah berhasil dikirim
+                // Reset halaman ke awal & muat ulang daftar komentar terbaru
+                currentPage = 1;
+                startIndex = 0;
+                endIndex = itemsPerPage;
                 await initialComentar();
+                
                 form.reset();
             } catch (error) {
                 console.error(`Error : ${error.message}`);
