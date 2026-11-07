@@ -63,7 +63,7 @@
     <i class="bx bx-snowflake snowflake" style="left: 55%; animation-duration: 6.5s; animation-delay: 4s; font-size: 0.9rem;"></i>
     <i class="bx bxs-circle snowflake" style="left: 65%; animation-duration: 8.5s; animation-delay: 2.5s; font-size: 0.4rem;"></i>
     <i class="bx bx-snowflake snowflake" style="left: 75%; animation-duration: 7.5s; animation-delay: 1.5s; font-size: 0.7rem;"></i>
-    <i class="bx bxs-circle snowflake" style="left: 85%; animation-duration: 9.5s; animation-delay: 3.5s; font-size: 0.5rem;"></i>
+    <i class="bx bx-snowflake snowflake" style="left: 85%; animation-duration: 9.5s; animation-delay: 3.5s; font-size: 0.5rem;"></i>
     <i class="bx bx-snowflake snowflake" style="left: 95%; animation-duration: 6s; animation-delay: 0.8s; font-size: 0.8rem;"></i>
 </div>
 
@@ -194,7 +194,8 @@
 
         <div data-aos="zoom-in" data-aos-duration="1000">
             <h2>Ucapan & Doa</h2>
-            <form method="POST">
+            <!-- Form murni tanpa method="POST" agar event submit dikendalikan sepenuhnya oleh JS (fetch async) -->
+            <form>
                 <label for="name">Nama</label>
                 <input type="text" name="name" id="name" placeholder="Masukan Nama Anda" autocomplete="off" required/>
                 
