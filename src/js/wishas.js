@@ -1,24 +1,21 @@
-import {
-    formattedDate,
-    formattedName,
-    generateRandomColor,
-    generateRandomId,
-    getCurrentDateTime,
-    renderElement
-} from "../utils/helper.js";
-import {data} from "../assets/data/data.js";
-import {comentarService} from "../services/comentarService.js";
-
 export const wishas = () => {
     const wishasContainer = document.querySelector('.wishas');
-    const [_, form] = wishasContainer.children[2].children;
-    const [peopleComentar, ___, containerComentar] = wishasContainer.children[3].children;
-    const buttonForm = form.children[6];
+    const form = wishasContainer.querySelector('form'); // Seleksi form secara langsung
+    const peopleComentar = wishasContainer.querySelector('.wishas > div:nth-child(4) p') || wishasContainer.querySelectorAll('.wishas > div')[2]?.querySelector('p'); // Menyesuaikan container teks info
+    
+    // Perbaikan aman untuk mengambil container komentar & pagination
+    const containerComentar = wishasContainer.querySelector('ul[aria-label="list comentar"]');
+    const buttonForm = form.querySelector('button[type="submit"]');
     const pageNumber = wishasContainer.querySelector('.page-number');
-    const [prevButton, nextButton] = wishasContainer.querySelectorAll('.button-grup button');
+    const prevButton = wishasContainer.querySelectorAll('.button-grup button')[0];
+    const nextButton = wishasContainer.querySelectorAll('.button-grup button')[1];
+
+    let lengthComentar = 0;
+    let currentPage = 1;
+    const itemsPerPage = 4;
 
     const listItemBank = (data) => (
-        `  <figure data-aos="zoom-in" data-aos-duration="1000">
+        ` <figure data-aos="zoom-in" data-aos-duration="1000">
                 <img src=${data.icon} alt="bank icon animation">
                 <figcaption>No. Rekening ${data.rekening.slice(0, 4)}xxxx <br>A.n ${data.name}</figcaption>
                 <button data-rekening=${data.rekening} aria-label="copy rekening">Salin No. Rekening</button>
@@ -27,7 +24,8 @@ export const wishas = () => {
 
     const initialBank = () => {
         const wishasBank = wishasContainer.children[1];
-        const [_, __, containerBank] = wishasBank.children;
+        if (!wishasBank) return;
+        const containerBank = wishasBank.querySelector('div:nth-child(3)') || wishasBank.lastElementChild;
 
         renderElement(data.bank, containerBank, listItemBank);
 
@@ -73,109 +71,121 @@ export const wishas = () => {
                  </li>`;
     };
 
-    let lengthComentar;
-
-    const initialComentar = async () => {
-        containerComentar.innerHTML = `<h1 style="font-size: 1rem; margin: auto">Loading...</h1>`;
-        peopleComentar.textContent = '...';
-        pageNumber.textContent = '..';
+    const updatePageContent = async () => {
+        if (!containerComentar) return;
+        containerComentar.innerHTML = '<h1 style="font-size: 1rem; margin: auto">Loading...</h1>';
+        if (pageNumber) pageNumber.textContent = '..';
+        if (prevButton) prevButton.disabled = true;
+        if (nextButton) nextButton.disabled = true;
 
         try {
             const response = await comentarService.getComentar();
+            if (response.error) throw new Error(response.error);
+
             const {comentar} = response;
-
             lengthComentar = comentar.length;
-            comentar.reverse();
 
-            if (comentar.length > 0) {
-                peopleComentar.textContent = `${comentar.length} Orang telah mengucapkan`;
-            } else {
-                peopleComentar.textContent = `Belum ada yang mengucapkan`;
-            }
+            const reversedComentar = [...comentar].reverse();
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
 
-            pageNumber.textContent = '1';
-            renderElement(comentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
+            renderElement(reversedComentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
+            if (pageNumber) pageNumber.textContent = currentPage.toString();
+
+            if (prevButton) prevButton.disabled = currentPage === 1;
+            if (nextButton) nextButton.disabled = endIndex >= lengthComentar;
         } catch (error) {
-            return `Error : ${error.message}`;
+            console.log(error);
+            containerComentar.innerHTML = '<h1 style="font-size: 1rem; margin: auto; color: red;">Gagal memuat komentar</h1>';
+        } finally {
+            if (prevButton && currentPage > 1) prevButton.disabled = false;
+            const maxPage = Math.ceil(lengthComentar / itemsPerPage);
+            if (nextButton && currentPage < maxPage) nextButton.disabled = false;
         }
     };
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        buttonForm.textContent = 'Loading...';
-
-        const comentar = {
-            id: generateRandomId(),
-            name: e.target.name.value,
-            status: e.target.status.value === 'y' ? 'Hadir' : 'Tidak Hadir',
-            message: e.target.message.value,
-            date: getCurrentDateTime(),
-            color: generateRandomColor(),
-        };
-
+    const initialComentar = async () => {
+        if (containerComentar) containerComentar.innerHTML = `<h1 style="font-size: 1rem; margin: auto">Loading...</h1>`;
+        
         try {
             const response = await comentarService.getComentar();
+            if (response.error) throw new Error(response.error);
 
-            await comentarService.addComentar(comentar);
-
-            lengthComentar = response.comentar.length;
-
-            peopleComentar.textContent = `${++response.comentar.length} Orang telah mengucapkan`;
-            containerComentar.insertAdjacentHTML('afterbegin', listItemComentar(comentar));
-        } catch (error) {
-            return `Error : ${error.message}`;
-        } finally {
-            buttonForm.textContent = 'Kirim';
-            form.reset();
-        }
-    });
-
-    // click prev & next
-    let currentPage = 1;
-    let itemsPerPage = 4;
-    let startIndex = 0;
-    let endIndex = itemsPerPage;
-
-    const updatePageContent = async () => {
-        containerComentar.innerHTML = '<h1 style="font-size: 1rem; margin: auto">Loading...</h1>';
-        pageNumber.textContent = '..';
-        prevButton.disabled = true;
-        nextButton.disabled = true;
-
-        try {
-            const response = await comentarService.getComentar();
             const {comentar} = response;
+            lengthComentar = comentar.length;
 
-            comentar.reverse();
+            if (peopleComentar) {
+                if (lengthComentar > 0) {
+                    peopleComentar.textContent = `${lengthComentar} Orang telah mengucapkan`;
+                } else {
+                    peopleComentar.textContent = `Belum ada yang mengucapkan`;
+                }
+            }
 
-            renderElement(comentar.slice(startIndex, endIndex), containerComentar, listItemComentar);
-            pageNumber.textContent = currentPage.toString();
+            currentPage = 1;
+            await updatePageContent();
         } catch (error) {
-            console.log(error);
-        } finally {
-            prevButton.disabled = false;
-            nextButton.disabled = false;
+            console.error(error);
+            if (peopleComentar) peopleComentar.textContent = `Gagal memuat data`;
+            if (containerComentar) containerComentar.innerHTML = '';
         }
+    };
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // <-- PENTING: Mencegah reload halaman dan parameter nempel di URL
+            
+            if (buttonForm) {
+                buttonForm.textContent = 'Loading...';
+                buttonForm.disabled = true;
+            }
+
+            const comentar = {
+                id: generateRandomId(),
+                name: form.name.value,
+                status: form.status.value === 'y' ? 'Hadir' : 'Tidak Hadir',
+                message: form.message.value,
+                date: getCurrentDateTime(),
+                color: generateRandomColor(),
+            };
+
+            try {
+                const response = await comentarService.addComentar(comentar);
+                if (response && response.error) throw new Error(response.error);
+
+                form.reset();
+                currentPage = 1;
+                await initialComentar(); // Refresh list komentar secara asynchronous
+            } catch (error) {
+                alert(`Error : ${error.message}`);
+            } finally {
+                if (buttonForm) {
+                    buttonForm.textContent = 'Kirim';
+                    buttonForm.disabled = false;
+                }
+            }
+        });
     }
 
-    nextButton.addEventListener('click', async () => {
-        if (endIndex <= lengthComentar) {
-            currentPage++;
-            startIndex = (currentPage - 1) * itemsPerPage;
-            endIndex = startIndex + itemsPerPage;
-            await updatePageContent();
-        }
-    });
+    if (nextButton) {
+        nextButton.addEventListener('click', async () => {
+            const maxPage = Math.ceil(lengthComentar / itemsPerPage);
+            if (currentPage < maxPage) {
+                currentPage++;
+                await updatePageContent();
+            }
+        });
+    }
 
-    prevButton.addEventListener('click', async () => {
-        if (currentPage > 1) {
-            currentPage--;
-            startIndex = (currentPage - 1) * itemsPerPage;
-            endIndex = startIndex + itemsPerPage;
-            await updatePageContent();
-        }
-    });
+    if (prevButton) {
+        prevButton.addEventListener('click', async () => {
+            if (currentPage > 1) {
+                currentPage--;
+                await updatePageContent();
+            }
+        });
+    }
 
-    initialComentar().then();
+    initialComentar();
     initialBank();
 };
