@@ -161,8 +161,7 @@
 
     <section class="galeri" id="galeri" aria-labelledby="galeri-title">
         <div class="container" data-aos="zoom-in" data-aos-duration="1000">
-            <h2 id="galeri-title">Live Galeri</h2>
-            <p class="galeri-subtitle">Abadikan momen spesial bersama kami & tampilkan langsung di galeri!</p>
+            <h2 id="galeri-title">Galeri</h2>
             <figure aria-label="galeri box"></figure>
             <ul aria-label="pagination galeri"></ul>
             <button type="button" aria-label="button prev galeri" data-id="">
@@ -171,77 +170,15 @@
             <button type="button" aria-label="button next galeri" data-id="">
                 <i class="bx bx-chevron-right"></i>
             </button>
-            <div class="galeri-actions">
-                <button type="button" id="open-live-camera-btn" class="btn-live-camera" aria-label="Ambil Foto Live">
-                    <i class='bx bxs-camera'></i>
-                    <span>Ambil Foto Live</span>
-                </button>
-                <button type="button" id="show-all-photos-btn" aria-label="Lihat semua foto">
-                    <i class='bx bx-grid-alt'></i>
-                    <span>Lihat Semua Foto</span>
-                </button>
-            </div>
+            <button type="button" aria-label="Lihat semua foto">Lihat semua foto</button>
         </div>
-        <div class="galeri-modal-all">
-            <h2>Semua Momen Galeri</h2>
+        <div>
+            <h2>Galeri</h2>
             <div></div>
             <button type="button" aria-label="close button">
                 <i class='bx bx-x' aria-hidden="true"></i>
             </button>
         </div>
-
-        <!-- Modal Live Camera Photo Sharing -->
-        <div id="live-camera-modal" class="live-camera-modal" aria-hidden="true">
-            <div class="camera-modal-content">
-                <div class="camera-modal-header">
-                    <h3><i class='bx bxs-camera-plus'></i> Live Photo Sharing</h3>
-                    <button type="button" id="close-camera-modal" aria-label="Tutup Kamera">
-                        <i class='bx bx-x'></i>
-                    </button>
-                </div>
-
-                <div class="camera-guest-input">
-                    <input type="text" id="camera-guest-name" placeholder="Nama Anda (Opsional)" maxlength="40" autocomplete="off">
-                </div>
-
-                <div class="camera-viewport">
-                    <video id="live-video-stream" autoplay playsinline muted></video>
-                    <canvas id="live-photo-canvas" style="display: none;"></canvas>
-                    <img id="live-photo-preview" alt="Preview Hasil Foto" style="display: none;">
-                    <div id="camera-loading-overlay" class="camera-overlay" style="display: none;">
-                        <i class='bx bx-loader-alt bx-spin'></i>
-                        <span id="camera-status-text">Mengunggah foto PNG ke Galeri...</span>
-                    </div>
-                </div>
-
-                <div class="camera-controls" id="camera-capture-controls">
-                    <button type="button" id="switch-camera-btn" class="btn-cam-secondary" title="Ganti Kamera Depan/Belakang">
-                        <i class='bx bx-refresh'></i>
-                        <span>Putar Kamera</span>
-                    </button>
-                    <button type="button" id="capture-photo-btn" class="btn-cam-shutter" title="Jepret Foto">
-                        <i class='bx bxs-camera'></i>
-                    </button>
-                    <label for="fallback-camera-input" class="btn-cam-secondary" title="Kamera Bawaan HP">
-                        <i class='bx bx-mobile-alt'></i>
-                        <span>Kamera HP</span>
-                    </label>
-                    <input type="file" id="fallback-camera-input" accept="image/*" capture="environment" style="display: none;">
-                </div>
-
-                <div class="camera-controls" id="camera-preview-controls" style="display: none;">
-                    <button type="button" id="retake-photo-btn" class="btn-cam-secondary">
-                        <i class='bx bx-reset'></i>
-                        <span>Foto Ulang</span>
-                    </button>
-                    <button type="button" id="upload-photo-btn" class="btn-cam-primary">
-                        <i class='bx bx-cloud-upload'></i>
-                        <span>Kirim ke Galeri</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Ornamen Pembatas -->
         <img src="src/assets/images/bar.png" class="divider-ornament divider-spacing" alt="ornamen pembatas" aria-hidden="true" data-aos="zoom-in" data-aos-duration="1000">
     </section>
